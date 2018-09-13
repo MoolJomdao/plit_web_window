@@ -1,0 +1,227 @@
+#box{
+	width: 1280px;
+	height: 525px;
+}
+#right{
+	float: left;
+	width: 20%;
+	margin-left: 30px;
+}
+#profile{
+	width: 100%;
+	background-color: white;
+	margin-top: 30px;
+	padding-bottom: 5px;
+	text-align: center;
+	border-radius: 5px;
+	box-shadow: 0px 0px 15px 3px rgb(221, 221, 221);
+}
+#profileImg{
+	width: 60%;
+	height: 170px;
+	margin: 20px;
+	border-radius: 5px;
+	margin-bottom: 8px;
+}
+#profileId{
+	width: 100%;
+	height: 30px;	
+}
+.sub{
+	width: 100%;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 0px 0px 15px 3px rgb(221, 221, 221);
+	height: 25px;
+	margin-top: 10px;
+	padding-top: 5px;
+	text-align: center;
+}
+#imgBox{
+	width: 100%;
+	height: 140px;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 0px 0px 15px 3px rgb(221, 221, 221);
+	margin-top: 10px;
+}
+/* �궡�슜 */
+#boardBox{
+	width: 40%;
+	height: 465px;
+	background-color: white;
+	box-shadow: 0px 0px 15px 3px rgb(221, 221, 221);
+	margin-top: 30px;
+	margin-left: 30px;
+	border-radius: 5px;
+	float: left;
+}
+#content{
+	margin: 2%;
+	padding: 2%;
+	height: 380px;
+	width: 92%;
+}
+#boardBox > img{
+	width: 24px;
+	height: 24px;
+	margin-right: 2%;
+	margin-top: 5px;
+	float: right;
+}
+/********************************************/
+/********************************************/
+/********************************************/
+#reply{
+	width: 30%;
+	height: 465px;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 0px 0px 15px 3px rgb(221, 221, 221);
+	margin-left: 30px;
+	margin-top: 30px;
+	float: left;
+}
+
+#reply > table{
+	width: 96%;
+	margin-right: 2%;
+	margin-left: 2%;
+	margin-top: 5px;
+}
+.replyIcon{
+	width: 60px;
+	height: 60px;
+}
+.replyId{
+	width: 70px;
+	padding-left: 6px;
+}
+.replyHit{
+	text-align: right;
+	width: 40px;
+}
+.replyDate{
+	text-align: right;
+}
+/********************************************/
+/********************************************/
+/********************************************/
+
+body{
+	margin: 0px;
+	background: rgb(242, 242, 242);
+}
+
+#wrapper{
+	width: 96%;
+	border-radius: 8px;
+	background-color: white;
+	margin: 2%;
+	box-shadow: 0px 0px 15px 3px rgb(221, 221, 221);
+}
+#toolbar{
+	width: 100%;
+	height: 60px;
+	border-bottom: solid 1px rgb(221, 221, 221);
+	background-color: white;
+	margin: none;
+}
+
+.searchButton{
+	width: 40px;
+	height: 40px;
+	border-radius: 50px;
+}
+/* .searchButton > img */
+#userIcon { 
+	width: 35px;
+	height: 35px;
+	border-radius: 50px;
+	margin-top: 12px;
+	margin-right: 3px;
+	margin-left: 3px;
+	float: right;
+	cursor: pointer;
+}
+#userId{
+	padding-top: 10px;
+	padding-right: 10px;
+	color: black;
+	display: inline-block;
+	margin-top: 7px;
+	margin-right: 7px;
+	margin-left: 7px;
+	float: right;
+}
+#logo{
+	width: 200px;
+	height: 60px;
+}
+/* icon */
+.menu {
+	width: 24px;
+	height: 24px;
+	float: right;
+	padding-top: 17px;
+	margin-right: 7px;
+	cursor: pointer;
+}
+	
+.searchBox {
+  width: 15%;
+  height: 25px;
+  position: relative;
+  padding-top: 17px;
+  margin-right: 40px;
+  float: right;
+}
+
+.searchTerm {
+	border-style: none;
+ 	float: left;
+	width: 90%;
+	padding-left: 7px;
+	height: 25px;
+	border-radius: 5px 0px 0px 5px;
+	outline: none;
+	background-color: rgb(242, 242, 242);
+	color: rgb(140, 140, 140);
+}
+.searchButton {
+  position: absolute;  
+  border: none;
+  border-radius: 0px 5px 5px 0px;
+  outline: none;
+  width: 40px;
+  height: 27px;
+  background: rgb(242, 242, 242);
+  text-align: center;
+  cursor: pointer;
+}
+
+#searchImg{
+	width: 20px;
+	height: 20px;
+	margin-top: 3px;
+}
+
+
+/* 諛섏쓳�삎 */
+@media ( max-width: 600px ) {
+	.searchBox {
+	  width: 15%;
+	  height: 25px;
+	  position: relative;
+	  padding-top: 17px;
+	  margin-left: 10px;
+	  float: left;
+	}
+	.searchButton{
+		padding-left: 0px;
+		width: 25px;
+	}
+	#searchImg{
+		float: left;
+	}
+}
