@@ -1036,7 +1036,7 @@ public class Dao {
 
 			pstmt = conn.prepareStatement(
 					"SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo "
-							+ "FROM board a, user_info b" + "WHERE a.id = b.id " + "ORDER BY a.date_board DESC");
+							+ "FROM board a, user_info b " + "WHERE a.id = b.id " + "ORDER BY a.date_board DESC");
 
 			rs = pstmt.executeQuery();
 
@@ -1059,9 +1059,9 @@ public class Dao {
 				pstmt.setInt(1, rbl.getBoardNum());
 				rs = pstmt.executeQuery();
 
-				rs.next(); 
-				rbl.setBoardPhoto(path + "PlitImage/" + rs.getString(2));
-				
+				if(rs.next()) { 
+					rbl.setBoardPhoto(path + "PlitImage/" + rs.getString(2));
+				}
 				
 				arr.add(rbl);
 
