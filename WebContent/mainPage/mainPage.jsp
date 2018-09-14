@@ -13,12 +13,23 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	
 	<% 
+		/*
+			private int boardNum;
+			private String content;
+			private String dateBoard;
+			private int good;
+			private double boardLatitude;
+			private double boardLongitude;
+			private String userId;
+			private String userPhoto;
+			private int category;
+			private int commentCnt;
+		*/
+		
 		ArrayList<Read_Board_List> arr = new ArrayList<Read_Board_List>();
-		arr = (ArrayList<Read_Board_List>) request.getAttribute("rbl");
+		arr = ( ArrayList<Read_Board_List> )request.getAttribute("rbl");
 		
-		System.out.println(session.getAttribute("id"));
-		
-		System.out.println(arr.size());
+		System.out.println( arr.size() );
 	%>
 	
 	
@@ -52,80 +63,28 @@
 	</header>
 	<div id="wrapper">
 		<div id="columns">
+		
 		<!-- class card 부분이 게시글 하나 --> 
-			<div class="card">
-				<img src="http://placehold.it/300x100" /> <!-- 대표 사진 -->
-				<p> Roasted chicken breast with sage and spinach </p> <!-- 내용 -->
-				<h6> 위치 ( 주소 ) </h6> <!-- 주소 -->
-				<div> 
-					<!-- 사용자 프로필 사진 -->
-					<div class="profile"> 
-					<img src="icon/user.png"> 
-					</div> 
-					<!-- 사용자 이름 -->
-					<h5> store_name </h5> 
+		<% 
+			for( int i=0; i<arr.size(); i++ )
+			{
+		%>
+				<div class="card">
+					<img src=<%= arr.get(i).getBoardPhoto() %> /> <!-- 대표 사진 -->
+					<p> <%= arr.get(i).getContent() %>  </p> <!-- 내용 -->
+					<h6> 위치 ( 주소 ) </h6> <!-- 주소(위도,경도로 찾아야함) -->
+					<div> 
+						<!-- 사용자 프로필 사진 -->
+						<div class="profile"> 
+						<img src=<%= arr.get(i).getUserPhoto() %> > 
+						</div> 
+						<!-- 사용자 이름 -->
+						<h5> <%= arr.get(i).getUserId() %>  </h5> 
+					</div>
 				</div>
-			</div>
-			
-			<!-- class card 부분이 게시글 하나 --> 
-			<div class="card">
-				<img src="http://placehold.it/300x100" /> <!-- 대표 사진 -->
-				<p> Roasted chicken breast with sage and spinach </p> <!-- 내용 -->
-				<h6> 위치 ( 주소 ) </h6> <!-- 주소 -->
-				<div> 
-					<!-- 사용자 프로필 사진 -->
-					<div class="profile"> 
-					<img src="icon/user.png"> 
-					</div> 
-					<!-- 사용자 이름 -->
-					<h5> store_name </h5> 
-				</div>
-			</div>
-			
-			<!-- class card 부분이 게시글 하나 --> 
-			<div class="card">
-				<img src="http://placehold.it/300x100" /> <!-- 대표 사진 -->
-				<p> Roasted chicken breast with sage and spinach </p> <!-- 내용 -->
-				<h6> 위치 ( 주소 ) </h6> <!-- 주소 -->
-				<div> 
-					<!-- 사용자 프로필 사진 -->
-					<div class="profile"> 
-					<img src="icon/user.png"> 
-					</div> 
-					<!-- 사용자 이름 -->
-					<h5> store_name </h5> 
-				</div>
-			</div>
-			
-			<!-- class card 부분이 게시글 하나 --> 
-			<div class="card">
-				<img src="http://placehold.it/300x300" /> <!-- 대표 사진 -->
-				<p> Roasted chicken breast with sage and spinach </p> <!-- 내용 -->
-				<h6> 위치 ( 주소 ) </h6> <!-- 주소 -->
-				<div> 
-					<!-- 사용자 프로필 사진 -->
-					<div class="profile"> 
-					<img src="icon/user.png"> 
-					</div> 
-					<!-- 사용자 이름 -->
-					<h5> store_name </h5> 
-				</div>
-			</div>
-			
-			<!-- class card 부분이 게시글 하나 --> 
-			<div class="card">
-				<img src="http://placehold.it/300x100" /> <!-- 대표 사진 -->
-				<p> Roasted chicken breast with sage and spinach </p> <!-- 내용 -->
-				<h6> 위치 ( 주소 ) </h6> <!-- 주소 -->
-				<div> 
-					<!-- 사용자 프로필 사진 -->
-					<div class="profile"> 
-					<img src="icon/user.png"> 
-					</div> 
-					<!-- 사용자 이름 -->
-					<h5> store_name </h5> 
-				</div>
-			</div>
+		<% 
+			} 
+		%>
 		</div>
 	</div>
 </body>

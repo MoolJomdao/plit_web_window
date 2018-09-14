@@ -52,17 +52,11 @@ public class LoginUserAction implements Action
 				return null;
 			}
 			
-			Dao dao = new Dao();
-			ArrayList<Read_Board_List> arr = new ArrayList<>();
-		   		
 			//로그인 성공
 			session.setAttribute("id", user.getId());
 			session.setAttribute("user", user);
+			
 			forward.setPath("/mainPageAction.bo");
-			
-			arr = dao.read_board_List();
-			
-			request.setAttribute("rbl", arr);
 			
 			return forward;
 		}
