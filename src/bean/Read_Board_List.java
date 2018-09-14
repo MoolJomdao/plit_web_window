@@ -10,7 +10,7 @@ public class Read_Board_List {
 	private double boardLongitude;
 	private String userId;
 	private String userPhoto;
-	private ArrayList<String> boardPhoto;
+	private String boardPhoto;
 	
 	public int getBoardNum() {
 		return boardNum;
@@ -48,11 +48,11 @@ public class Read_Board_List {
 	public void setUserPhoto(String userPhoto) {
 		this.userPhoto = userPhoto;
 	}
-	public ArrayList<String> getBoardPhoto() {
+	public String getBoardPhoto() {
 		return boardPhoto;
 	}
 	public void setBoardPhoto(String boardPhoto) {
-		this.boardPhoto.add(boardPhoto);
+		this.boardPhoto = boardPhoto;
 	}
 	
 	

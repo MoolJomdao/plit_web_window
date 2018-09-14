@@ -1059,9 +1059,9 @@ public class Dao {
 				pstmt.setInt(1, rbl.getBoardNum());
 				rs = pstmt.executeQuery();
 
-				while (rs.next()) {
-					rbl.setBoardPhoto(path + "PlitImage/" + rs.getString(2));
-				}
+				rs.next(); 
+				rbl.setBoardPhoto(path + "PlitImage/" + rs.getString(2));
+				
 				
 				arr.add(rbl);
 
