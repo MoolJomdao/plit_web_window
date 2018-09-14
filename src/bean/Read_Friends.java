@@ -2,21 +2,21 @@ package bean;
 
 public class Read_Friends {
 	
-	private String user_Id;
-	private String user_Photo;
+	private String userId;
+	private String userPhoto;
 	private String message;
 	
 	public String getUserId() {
-		return user_Id;
+		return userId;
 	}
 	public void setUserId(String userId) {
-		this.user_Id = userId;
+		this.userId = userId;
 	}
 	public String getUserPhoto() {
-		return user_Photo;
+		return userPhoto;
 	}
 	public void setUserPhoto(String userPhoto) {
-		this.user_Photo = userPhoto;
+		this.userPhoto = userPhoto;
 	}
 	public String getMessage() {
 		return message;

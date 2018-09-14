@@ -2,21 +2,21 @@ package bean;
 
 public class Read_Myboard {
 	
-	private int board_Num;
+	private int boardNum;
 	private String content;
-	private String date_Board;
+	private String dateBoard;
 	private int good;
 	private double latitude;
 	private double longitude;
-	private String user_Id;
-	private String user_Photo;
+	private String userId;
+	private String userPhoto;
 	private int category;
-	private int comment_Cnt;
-	public int getBoard_Num() {
-		return board_Num;
+	private int commentCnt;
+	public int getBoardNum() {
+		return boardNum;
 	}
-	public void setBoard_Num(int board_Num) {
-		this.board_Num = board_Num;
+	public void setBoardNum(int boardNum) {
+		this.boardNum = boardNum;
 	}
 	public String getContent() {
 		return content;
@@ -24,11 +24,11 @@ public class Read_Myboard {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getDate_Board() {
-		return date_Board;
+	public String getDateBoard() {
+		return dateBoard;
 	}
-	public void setDate_Board(String date_Board) {
-		this.date_Board = date_Board;
+	public void setDateBoard(String dateBoard) {
+		this.dateBoard = dateBoard;
 	}
 	public int getGood() {
 		return good;
@@ -48,17 +48,17 @@ public class Read_Myboard {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public String getUser_Id() {
-		return user_Id;
+	public String getUserId() {
+		return userId;
 	}
-	public void setUser_Id(String user_Id) {
-		this.user_Id = user_Id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getUser_Photo() {
-		return user_Photo;
+	public String getUserPhoto() {
+		return userPhoto;
 	}
-	public void setUser_Photo(String user_Photo) {
-		this.user_Photo = user_Photo;
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
 	public int getCategory() {
 		return category;
@@ -66,11 +66,11 @@ public class Read_Myboard {
 	public void setCategory(int category) {
 		this.category = category;
 	}
-	public int getComment_Cnt() {
-		return comment_Cnt;
+	public int getCommentCnt() {
+		return commentCnt;
 	}
-	public void setComment_Cnt(int comment_Cnt) {
-		this.comment_Cnt = comment_Cnt;
+	public void setCommentCnt(int commentCnt) {
+		this.commentCnt = commentCnt;
 	}
 	
 	

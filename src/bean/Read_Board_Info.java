@@ -1,23 +1,32 @@
 package bean;
 
+import java.util.ArrayList;
+
 public class Read_Board_Info {
 
-	private int board_Num;
+	private int boardNum;
 	private String content;
 	private String date;
 	private int good;
 	private int hits;
 	private double latitude;
 	private double longitude;
-	private String user_Id;
-	private String user_Photo;
+	private String userId;
+	private String userPhoto;
 	private int is_Good;
+	private String boardPhoto;
 	
-	public int getBoard_Num() {
-		return board_Num;
+	public String getBoardPhoto() {
+		return boardPhoto;
 	}
-	public void setBoard_Num(int board_Num) {
-		this.board_Num = board_Num;
+	public void setBoardPhoto(String boardPhoto) {
+		this.boardPhoto = boardPhoto;
+	}
+	public int getBoardNum() {
+		return boardNum;
+	}
+	public void setBoardNum(int boardNum) {
+		this.boardNum = boardNum;
 	}
 	public String getContent() {
 		return content;
@@ -55,26 +64,25 @@ public class Read_Board_Info {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public String getUser_Id() {
-		return user_Id;
+	public String getUserId() {
+		return userId;
 	}
-	public void setUser_Id(String user_Id) {
-		this.user_Id = user_Id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getUser_Photo() {
-		return user_Photo;
+	public String getUserPhoto() {
+		return userPhoto;
 	}
-	public void setUser_Photo(String user_Photo) {
-		this.user_Photo = user_Photo;
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
-	
 	public int getIs_Good() {
 		return is_Good;
 	}
-	
-	public void setIs_Good(int is_good) {
-		is_Good = is_good;
+	public void setIs_Good(int is_Good) {
+		this.is_Good = is_Good;
 	}
+	
 	
 	
 }

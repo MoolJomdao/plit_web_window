@@ -2,22 +2,22 @@ package bean;
 
 public class Read_Board_Location {
 	
-	private int board_Num;
+	private int boardNum;
 	private String content;
 	private String Id;
-	private String user_Photo;
-	private int is_Photo;
-	private int photo_Count;
-	private String board_Photo;
-	private double board_Latitude;
-	private double board_Longitude;
-	private int board_Count;
+	private String userPhoto;
+	private int isPhoto;
+	private int photoCount;
+	private String boardPhoto;
+	private double boardLatitude;
+	private double boardLongitude;
+	private int boardCount;
 	
-	public int getBoard_Num() {
-		return board_Num;
+	public int getBoardNum() {
+		return boardNum;
 	}
-	public void setBoard_Num(int board_Num) {
-		this.board_Num = board_Num;
+	public void setBoardNum(int boardNum) {
+		this.boardNum = boardNum;
 	}
 	public String getContent() {
 		return content;
@@ -31,47 +31,47 @@ public class Read_Board_Location {
 	public void setId(String id) {
 		Id = id;
 	}
-	public String getUser_Photo() {
-		return user_Photo;
+	public String getUserPhoto() {
+		return userPhoto;
 	}
-	public void setUser_Photo(String user_Photo) {
-		this.user_Photo = user_Photo;
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
-	public int getIs_Photo() {
-		return is_Photo;
+	public int getIsPhoto() {
+		return isPhoto;
 	}
-	public void setIs_Photo(int is_Photo) {
-		this.is_Photo = is_Photo;
+	public void setIsPhoto(int isPhoto) {
+		this.isPhoto = isPhoto;
 	}
-	public double getBoard_Latitude() {
-		return board_Latitude;
+	public int getPhotoCount() {
+		return photoCount;
 	}
-	public void setBoard_Latitude(double board_Latitude) {
-		this.board_Latitude = board_Latitude;
+	public void setPhotoCount(int photoCount) {
+		this.photoCount = photoCount;
 	}
-	public double getBoard_Longitude() {
-		return board_Longitude;
+	public String getBoardPhoto() {
+		return boardPhoto;
 	}
-	public void setBoard_Longitude(double board_Longitude) {
-		this.board_Longitude = board_Longitude;
+	public void setBoardPhoto(String boardPhoto) {
+		this.boardPhoto = boardPhoto;
 	}
-	public int getBoard_Count() {
-		return board_Count;
+	public double getBoardLatitude() {
+		return boardLatitude;
 	}
-	public void setBoard_Count(int board_Count) {
-		this.board_Count = board_Count;
+	public void setBoardLatitude(double boardLatitude) {
+		this.boardLatitude = boardLatitude;
 	}
-	public int getPhoto_Count() {
-		return photo_Count;
+	public double getBoardLongitude() {
+		return boardLongitude;
 	}
-	public void setPhoto_Count(int photo_Count) {
-		this.photo_Count = photo_Count;
+	public void setBoardLongitude(double boardLongitude) {
+		this.boardLongitude = boardLongitude;
 	}
-	public String getBoard_Photo() {
-		return board_Photo;
+	public int getBoardCount() {
+		return boardCount;
 	}
-	public void setBoard_Photo(String board_Photo) {
-		this.board_Photo = board_Photo;
+	public void setBoardCount(int boardCount) {
+		this.boardCount = boardCount;
 	}
 	
 	

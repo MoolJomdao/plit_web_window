@@ -2,34 +2,35 @@ package bean;
 
 public class Read_Mypage {
 	
-	private String user_Id;
-	private String date_Birth;
-	private String date_Member;
-	private String user_Photo;
+	private String userId;
+	private String dateBirth;
+	private String dateMember;
+	private String userPhoto;
 	private String massage;
-	public String getUser_Id() {
-		return user_Id;
+	
+	public String getUserId() {
+		return userId;
 	}
-	public void setUser_Id(String user_Id) {
-		this.user_Id = user_Id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getDate_Birth() {
-		return date_Birth;
+	public String getDateBirth() {
+		return dateBirth;
 	}
-	public void setDate_Birth(String date_Birth) {
-		this.date_Birth = date_Birth;
+	public void setDateBirth(String dateBirth) {
+		this.dateBirth = dateBirth;
 	}
-	public String getDate_Member() {
-		return date_Member;
+	public String getDateMember() {
+		return dateMember;
 	}
-	public void setDate_Member(String date_Member) {
-		this.date_Member = date_Member;
+	public void setDateMember(String dateMember) {
+		this.dateMember = dateMember;
 	}
-	public String getUser_Photo() {
-		return user_Photo;
+	public String getUserPhoto() {
+		return userPhoto;
 	}
-	public void setUser_Photo(String user_Photo) {
-		this.user_Photo = user_Photo;
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
 	public String getMassage() {
 		return massage;
@@ -37,6 +38,8 @@ public class Read_Mypage {
 	public void setMassage(String massage) {
 		this.massage = massage;
 	}
+	
+	
 	
 	
 

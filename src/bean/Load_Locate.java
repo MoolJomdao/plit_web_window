@@ -2,15 +2,16 @@ package bean;
 
 public class Load_Locate {
 	
-	private int save_Number;
+	private int saveNumber;
 	private double latitude;
 	private double longitude;
 	private String massage;
-	public int getSave_Number() {
-		return save_Number;
+	
+	public int getSaveNumber() {
+		return saveNumber;
 	}
-	public void setSave_Number(int save_Number) {
-		this.save_Number = save_Number;
+	public void setSaveNumber(int saveNumber) {
+		this.saveNumber = saveNumber;
 	}
 	public double getLatitude() {
 		return latitude;
@@ -30,6 +31,7 @@ public class Load_Locate {
 	public void setMassage(String massage) {
 		this.massage = massage;
 	}
+
 	
 	
 

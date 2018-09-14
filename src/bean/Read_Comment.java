@@ -2,47 +2,48 @@ package bean;
 
 public class Read_Comment {
 	
-	private int board_Num;
-	private int comment_Num;
-	private String comment_Date;
-	private String comment_Content;
-	private String comment_Id;
-	private String user_Photo;
-	public int getBoard_Num() {
-		return board_Num;
+	private int boardNum;
+	private int commentNum;
+	private String commentDate;
+	private String commentContent;
+	private String commentId;
+	private String userPhoto;
+	
+	public int getBoardNum() {
+		return boardNum;
 	}
-	public void setBoard_Num(int board_Num) {
-		this.board_Num = board_Num;
+	public void setBoardNum(int boardNum) {
+		this.boardNum = boardNum;
 	}
-	public int getComment_Num() {
-		return comment_Num;
+	public int getCommentNum() {
+		return commentNum;
 	}
-	public void setComment_Num(int comment_Num) {
-		this.comment_Num = comment_Num;
+	public void setCommentNum(int commentNum) {
+		this.commentNum = commentNum;
 	}
-	public String getComment_Date() {
-		return comment_Date;
+	public String getCommentDate() {
+		return commentDate;
 	}
-	public void setComment_Date(String comment_Date) {
-		this.comment_Date = comment_Date;
+	public void setCommentDate(String commentDate) {
+		this.commentDate = commentDate;
 	}
-	public String getComment_Content() {
-		return comment_Content;
+	public String getCommentContent() {
+		return commentContent;
 	}
-	public void setComment_Content(String comment_Content) {
-		this.comment_Content = comment_Content;
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
 	}
-	public String getComment_Id() {
-		return comment_Id;
+	public String getCommentId() {
+		return commentId;
 	}
-	public void setComment_Id(String comment_Id) {
-		this.comment_Id = comment_Id;
+	public void setCommentId(String commentId) {
+		this.commentId = commentId;
 	}
-	public String getUser_Photo() {
-		return user_Photo;
+	public String getUserPhoto() {
+		return userPhoto;
 	}
-	public void setUser_Photo(String user_Photo) {
-		this.user_Photo = user_Photo;
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
 	
 	
