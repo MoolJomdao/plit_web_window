@@ -23,11 +23,11 @@ public class Dao {
 
 	ResultSet rs = null;
 
-	String path = "http://39.127.8.20:8080/";
-	String path2 = "/var/lib/tomcat7/webapps/ROOT";
+	//String path = "http://39.127.8.20:8080/";
+	//String path2 = "/var/lib/tomcat7/webapps/ROOT";
 
-	// String path = "http://39.127.8.25:8080/";
-	// String path2 = "./";
+	String path = "";
+	String path2 = "./";
 
 	public Dao()
 
@@ -1031,6 +1031,7 @@ public class Dao {
 	public ArrayList<Read_Board_List> read_board_List() {
 		ArrayList<Read_Board_List> arr = new ArrayList<>();
 		Read_Board_List rbl = null;
+		ResultSet photoResult = null;
 
 		try {
 			String str = "SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo "
@@ -1058,14 +1059,13 @@ public class Dao {
 
 				pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
 				pstmt.setInt(1, rbl.getBoardNum());
-				rs = pstmt.executeQuery();
+				photoResult = pstmt.executeQuery();
 				
-				if( rs.next() ) 
-					rbl.setBoardPhoto(path + "PlitImage/" + rs.getString(2));
+				if( photoResult.next() ) 
+					rbl.setBoardPhoto(path + "PlitImage/" + photoResult.getString(2));
 				
 				
 				arr.add(rbl);
-
 			}
 
 			// =======================================================================
@@ -1078,20 +1078,18 @@ public class Dao {
 			e.printStackTrace();
 			return null;
 		} finally {
+			
 			try {
 				if (rs != null)
 					rs.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (pstmt != null)
 					pstmt.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (conn != null)
 					conn.close();
-			} catch (Exception e) {
+				if (photoResult != null)
+					photoResult.close();
+			} 
+			catch (Exception e) {
 			}
 		}
 

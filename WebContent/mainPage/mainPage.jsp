@@ -25,6 +25,7 @@
 			private int category;
 			private int commentCnt;
 		*/
+		HttpSession ses = request.getSession();
 		
 		ArrayList<Read_Board_List> arr = new ArrayList<Read_Board_List>();
 		arr = ( ArrayList<Read_Board_List> )request.getAttribute("rbl");
@@ -56,7 +57,20 @@
 		  	   <li> <input> </input> </li>
   			   <li> <a href="#"> <img src="icon/search.png"> </a></li>
 		  	   <li> <a href="#"> 글쓰기 </a></li>
-  			   <li> <a href="#"> Login </a></li>
+		  	   <%
+		  	   		if( ses.getAttribute("id") == null )
+		  	   		{
+		  	   %>
+  			   		<li> <a href="#"> Login </a></li>
+		  	   <%
+		  	   		}
+		  	   		else
+		  	   		{
+		  	   %>
+		  	   		<li> <a href="#"> Logout </a></li>
+		  	   <% 
+		  	   		}
+		  	   %>
 		  	</ul>
 		  </div>
 		</nav>

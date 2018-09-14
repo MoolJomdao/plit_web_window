@@ -36,7 +36,6 @@ public class LoginUserAction implements Action
 			user.setPw(request.getParameter("pw"));
 	 
 			user = userDao.getUserLogin(user.getId(), user.getPw());
-			
 		   		
 			if( user == null )
 			{
