@@ -1096,11 +1096,7 @@ public class Dao {
 		}
 
 		return arr;
-	}
-			}
-		}
-
-		return arr;
+		
 	}
 
 	/*public Read_Board_List read_board_List(double min_lat, double max_lat, double min_lon, double max_lon) {
