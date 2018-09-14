@@ -1035,8 +1035,8 @@ public class Dao {
 		try {
 
 			pstmt = conn.prepareStatement(
-					"SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,a.category_num,a.comment_cnt "
-							+ "FROM board a, user_info b " + "WHERE a.id = b.id " + "ORDER BY a.date_board DESC");
+					"SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo "
+							+ "FROM board a, user_info b" + "WHERE a.id = b.id " + "ORDER BY a.date_board DESC");
 
 			rs = pstmt.executeQuery();
 
@@ -1045,20 +1045,24 @@ public class Dao {
 
 				rbl.setBoardNum(rs.getInt(1));
 				rbl.setContent(rs.getString(2));
-				rbl.setDateBoard(rs.getString(3));
-				rbl.setGood(rs.getInt(4));
-				rbl.setBoardLatitude(rs.getDouble(5));
-				rbl.setBoardLongitude(rs.getDouble(6));
-				rbl.setUserId(rs.getString(7));
+				rbl.setBoardLatitude(rs.getDouble(3));
+				rbl.setBoardLongitude(rs.getDouble(4));
+				rbl.setUserId(rs.getString(5));
 
-				if (rs.getString(8).equals("No Photo")) {
-					rbl.setUserPhoto(rs.getString(8));
+				if (rs.getString(6).equals("No Photo")) {
+					rbl.setUserPhoto(rs.getString(6));
 				} else {
-					rbl.setUserPhoto(path + "PlitImage/" + rs.getString(8));
+					rbl.setUserPhoto(path + "PlitImage/" + rs.getString(6));
 				}
-				rbl.setCategory(rs.getInt(9));
-				rbl.setCommentCnt(rs.getInt(10));
 
+				pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
+				pstmt.setInt(1, rbl.getBoardNum());
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					rbl.setBoardPhoto(path + "PlitImage/" + rs.getString(2));
+				}
+				
 				arr.add(rbl);
 
 			}
@@ -1093,7 +1097,7 @@ public class Dao {
 		return arr;
 	}
 
-	public Read_Board_List read_board_List(double min_lat, double max_lat, double min_lon, double max_lon) {
+	/*public Read_Board_List read_board_List(double min_lat, double max_lat, double min_lon, double max_lon) {
 		Read_Board_List rbl = new Read_Board_List();
 
 		try {
@@ -1219,7 +1223,7 @@ public class Dao {
 		}
 
 		return rbl;
-	}
+	}*/
 
 	public Read_Board_Location read_board_location(double min_lat, double max_lat, double min_lon, double max_lon) {
 		Read_Board_Location rb_location = new Read_Board_Location();
@@ -1535,7 +1539,9 @@ public class Dao {
 		try {
 
 			pstmt = conn.prepareStatement(
-					"SELECT a.board_num, a.board_content, a.date_board, a.good, a.hits, a.board_latitude,a.board_longitude,a.id,b.user_photo FROM board a, user_info b WHERE a.id = b.id AND a.board_num = ?");
+					"SELECT a.board_num, a.board_content, a.date_board, a.good, a.hits, a.board_latitude,a.board_longitude,a.id,b.user_photo "
+					+ "FROM board a, user_info b "
+					+ "WHERE a.id = b.id AND a.board_num = ?");
 			pstmt.setInt(1, Integer.parseInt(board_num));
 			rs = pstmt.executeQuery();
 
