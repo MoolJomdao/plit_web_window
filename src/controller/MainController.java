@@ -26,14 +26,8 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 			String command = RequestURI.substring(contextPath.length()); // 占쏙옙占싹몌옙
 			ActionForward forward = null;
 			Action action = null;
-		
-			if( command.equals("/mainPage.bo") )
-			{
-				forward = new ActionForward();
-				forward.setRedirect(false);
-				forward.setPath("/mainPage/mainPage.jsp");
-			}		
-			else if( command.equals("/mainPageAction.bo") )
+			
+			if( command.equals("/mainPageAction.bo") )
 			{
 				action = new BoardListAction();
 				forward = action.execute(request, response);

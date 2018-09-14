@@ -1033,10 +1033,11 @@ public class Dao {
 		Read_Board_List rbl = null;
 
 		try {
-
-			pstmt = conn.prepareStatement(
-					"SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo "
-							+ "FROM board a, user_info b " + "WHERE a.id = b.id " + "ORDER BY a.date_board DESC");
+			String str = "SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo "
+					+ "FROM board a, user_info b " 
+					+ "WHERE a.id = b.id " 
+					+ "ORDER BY a.date_board DESC";
+			pstmt = conn.prepareStatement( str );
 
 			rs = pstmt.executeQuery();
 
@@ -1058,10 +1059,10 @@ public class Dao {
 				pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
 				pstmt.setInt(1, rbl.getBoardNum());
 				rs = pstmt.executeQuery();
-
-				if(rs.next()) { 
+				
+				if( rs.next() ) 
 					rbl.setBoardPhoto(path + "PlitImage/" + rs.getString(2));
-				}
+				
 				
 				arr.add(rbl);
 
@@ -1091,6 +1092,11 @@ public class Dao {
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
+			}
+		}
+
+		return arr;
+	}
 			}
 		}
 

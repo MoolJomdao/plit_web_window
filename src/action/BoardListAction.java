@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import bean.Dao;
+import bean.Read_Board_List;
 import dao.BoardDao;
 import db.BoardBean;
 
-// °Ô½Ã±Û °¡Á®¿À±â
+// ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 public class BoardListAction implements Action{
 
 	@Override
@@ -19,13 +22,13 @@ public class BoardListAction implements Action{
 			ActionForward forward= new ActionForward();
 			HttpSession session = request.getSession();
 			
-			// login¿¡¼­ »ç¿ëÀÚ ¾ÆÀÌµð ¹Þ¾Æ¿À±â
+			// loginï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
 			String id = (String)session.getAttribute("id");
 	   		if(id==null){
-	   			// TODO ¾ÆµðÀÌ ¹Þ¾Æ ¿ÀÁö ¸øÇßÀ» °æ¿ì ·Î±×ÀÎ È­¸éÀ¸·Î °£´Ù.
+	   			// TODO ï¿½Æµï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 				forward.setRedirect(true);
 				forward.setPath("./SignIn.me");
-				System.out.println("·Î±×ÀÎ ½ÇÆÐ. - BoardListAction -");
+				System.out.println("ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. - BoardListAction -");
 				return forward;
 	   		}
 	   		
@@ -34,9 +37,9 @@ public class BoardListAction implements Action{
 			ArrayList<String> imglist = new ArrayList<>();
 			
 		  	int page = 1;
-			int limit = 10; // ÇÑ¹ø¿¡ ºÒ·¯¿Ã ±Û °¹¼ö
+			int limit = 10; // ï¿½Ñ¹ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			
-			boardlist = boardDao.getBoardList(page, limit); //¸®½ºÆ®¸¦ ¹Þ¾Æ ¿È
+			boardlist = boardDao.getBoardList(page, limit); //ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Þ¾ï¿½ ï¿½ï¿½
 	   				
 			for( int i = 0; i < boardlist.size(); i++ )
 			{
@@ -52,11 +55,16 @@ public class BoardListAction implements Action{
 				
 			}
 			
-	   		request.setAttribute("page", page); // ÇöÀç ÆäÀÌÁö
+	   		request.setAttribute("page", page); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			request.setAttribute("boardlist", boardlist); // return ArrayList;
 			request.setAttribute("imglist", imglist);
 			
+			Dao dao = new Dao();
+			ArrayList<Read_Board_List> arr = new ArrayList<>();
+		   		
+			arr = dao.read_board_List();
 			
+			request.setAttribute("rbl", arr);
 		   	forward.setRedirect(false);
 	   		forward.setPath("/mainPage/mainPage.jsp");
 	   		
