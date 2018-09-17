@@ -56,7 +56,7 @@
 		  	<ul class="nav navbar-nav navbar-right">
 		  	   <li> <input> </input> </li>
   			   <li> <a href="#"> <img src="icon/search.png"> </a></li>
-		  	   <li> <a href="#"> 글쓰기 </a></li>
+		  	   <li> <a href="./html/writeBoard.jsp"> 글쓰기 </a></li>
 		  	   <%
 		  	   		if( ses.getAttribute("id") == null )
 		  	   		{

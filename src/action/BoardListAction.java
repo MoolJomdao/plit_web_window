@@ -66,7 +66,7 @@ public class BoardListAction implements Action{
 			
 			request.setAttribute("rbl", arr);
 		   	forward.setRedirect(false);
-	   		forward.setPath("/mainPage/mainPage.jsp");
+	   		forward.setPath("/html/mainPage.jsp");
 	   		
 	   		return forward;
 		}

@@ -208,12 +208,14 @@ public class DataDao {
 	    		rs = null;
 	    		pstmt = null;
 	    		
-	    		pstmt = con.prepareStatement("INSERT INTO board( board_content, date_board, good,hits, board_tag, board_latitude, board_longitude, id ) VALUES (?,sysdatetime(),0,0,?,?,?,?)"); // mysql : sysdate(), cubrid : sysdatetime()
+	    		pstmt = con.prepareStatement("INSERT INTO board( board_content, date_board, good,hits, board_tag, board_latitude, board_longitude, id, category_num, comment_cnt ) VALUES (?,SYSDATE,0,0,?,?,?,?,?,?)"); // mysql : sysdate(), cubrid : sysdatetime()
 	    		pstmt.setString(1, Content);
 	    		pstmt.setString(2, tag);
 	    		pstmt.setDouble(3, board_latitude);
 	    		pstmt.setDouble(4, board_longitude);
 	    		pstmt.setString(5, user_name);
+	    		pstmt.setInt(6, 0); // 바꿔야함
+	    		pstmt.setInt(7, 0); // 바꿔야
 	    		result = pstmt.executeUpdate();
 
 	    		if( rs != null )

@@ -21,7 +21,7 @@ import dao.DataDao;
 public class DataController extends javax.servlet.http.HttpServlet 
 implements javax.servlet.Servlet {
 	
-	public static final String m_serverIP = "http://192.168.0.11:8080";
+	public static final String m_serverIP = "http://127.0.0.1:8080";
 	
 // doGet, doPost �몮�떎 �떎�뻾�빐�룄 doProcess �떎�뻾�맖
 protected void doProcess( HttpServletRequest request, HttpServletResponse response ) 

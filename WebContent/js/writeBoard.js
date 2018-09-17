@@ -2,7 +2,8 @@ var countOfImage = 0;
 
 $(document).ready(function(){
 	
-    $("#upload_click").click( function() {
+    $("#upload_click").click( function( event ) {
+        event.preventDefault(); // 기존 리다이렉트 되는 이벤트 제거
         $("#upload").click();
     });
 	/************************************************
@@ -34,7 +35,7 @@ $(document).ready(function(){
                     backgroundSize : "100%",
                     backgroundRepeat : "no-repeat",
                     backgroundPosition : "center center",
-                    float : "left",
+                    display : "inline-block",
                 });
                 
                 countOfImage++;
@@ -59,8 +60,7 @@ $(document).ready(function(){
             $("#upload").val(""); 
         }
     });
-       
-	
+    
     $("#submit").click( function( event )
     {
         var id = $("#id_value").val();
@@ -93,11 +93,11 @@ $(document).ready(function(){
             processData: false,
             success: function ( returndata ) {
             	if( parseInt(returndata) == 1 )
-            		alert("이미지 업로드 성공");
+            		alert("게시글 업로드 성공");
             	else
-            		alert("이미지 업로드 실패");
+            		alert("게시글 업로드 실패");
 
-            	location.href='mainPageAction.bo';
+            	location.href='./mainPageAction.bo';
             }
           });
 
