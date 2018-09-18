@@ -75,15 +75,15 @@ $(document).ready(function(){
         {
             formData.append("img"+i, $("#upload")[0].files[i] );
         }
-        formData.append("type","setBoard");
+        
         formData.append("id", id);
-        formData.append("locationText", locationText);
-        formData.append("textArea", textArea);
+        formData.append("location", locationText);
+        formData.append("content", textArea);
         // 이미지 formData 넣기, 이미지 더 보내고 싶으면 formData.append('img', $(this)[1] ); 첫번째면 0, 두번째 이미지면 1 세번째 이미지면 2 반드시 key 값을 'img'로
         // 글도 같이 보낼 수 있다 formData.append('key', 'value' );
 
         $.ajax({
-            url: '.data',
+            url: '../writeBoard.bo',
             type: 'POST',
             enctype: "multipart/form-data",
             data: formData,
@@ -92,12 +92,7 @@ $(document).ready(function(){
             contentType: false,
             processData: false,
             success: function ( returndata ) {
-            	if( parseInt(returndata) == 1 )
-            		alert("게시글 업로드 성공");
-            	else
-            		alert("게시글 업로드 실패");
-
-            	location.href='./mainPageAction.bo';
+      
             }
           });
 

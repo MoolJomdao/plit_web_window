@@ -1,5 +1,9 @@
 package action;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,20 +22,21 @@ public class BoardWriteAction implements Action{
 	{
 		try
 		{	
+			Dao dao = null;
 			ActionForward forward = new ActionForward();
 			HttpSession session = request.getSession();
 			MultipartRequest multi = null;
 			
 			//이미지 처리
 			request.setCharacterEncoding("UTF-8"); 
-			String realFolder = ""; 
-			String filename1 = ""; 
+			ServletContext context = request.getServletContext(); // �쁽�옱 �꽌釉붾┸ 媛앹껜
+			String savePath = context.getRealPath("PlitImage"); 
 			int maxSize = 1024*1024*5; 
 			String encType = "UTF-8"; 
 			String savefile = "img";  
 			
 			try{ 
-				multi=new MultipartRequest(request, realFolder, maxSize, encType, new DefaultFileRenamePolicy()); 
+				multi=new MultipartRequest(request, savePath, maxSize, encType, new DefaultFileRenamePolicy()); 
 			
 			} catch(Exception e) { 
 				e.printStackTrace(); 
@@ -40,15 +45,29 @@ public class BoardWriteAction implements Action{
 			//전달값 저장
 			String board_num = null;
 			String id = (String)session.getAttribute("id");
-			String content = (String) (request.getAttribute("content") == null ? null:request.getAttribute("content"));
-			String tag = (String) (request.getAttribute("tag") == null ? null:request.getAttribute("tag"));
-			double latitude = (double) (request.getAttribute("latitude") == null ? 0.0:request.getAttribute("latitude"));
-			double longitude = (double) (request.getAttribute("longitude") == null ? 0.0:request.getAttribute("longitude"));
-			int category = (int) (request.getAttribute("category") == null ? 0:request.getAttribute("category"));
-			String photo = (String) (multi.getFilesystemName("photo") == null ? null:request.getAttribute("content"));
-			String fullpath = realFolder + "\\" + filename1; 
+			String content = (String) (multi.getParameter("content") == null ? null:multi.getParameter("content"));
+			String tag = (String) (multi.getParameter("tag") == null ? null:multi.getParameter("tag"));
+			double latitude = (double) (multi.getParameter("latitude") == null ? 0.0:multi.getParameter("latitude"));
+			double longitude = (double) (multi.getParameter("longitude") == null ? 0.0:multi.getParameter("longitude"));
+			int category = (int) (multi.getParameter("category") == null ? 0:multi.getParameter("category"));
 			
-			Dao dao = new Dao();
+			Enumeration Names = multi.getFileNames(); 
+			ArrayList<String> fileNames = new ArrayList<>();
+			if( Names != null )
+			{
+				while( Names.hasMoreElements() ) 
+				{
+					String strName = Names.nextElement().toString();
+					String fileName = multi.getFilesystemName(strName);
+					fileNames.add( fileName ); 
+				}
+			}
+			else
+			{
+				fileNames.add("");
+			}
+			
+			dao = new Dao();
 			
 			try {
 				board_num = dao.write_board(content, id, tag, latitude, longitude, category);
@@ -57,19 +76,19 @@ public class BoardWriteAction implements Action{
 				return null;
 			}
 			
-			if(photo != null) {
-				try {
-					dao.write_board_phto(board_num, photo);
-					System.out.println(fullpath); //사진 전체경로 보기
-				}catch(Exception c) {
-					c.printStackTrace();
-				}
+			
+			
+			if(fileNames.size() != 0) {
+				dao = new Dao();
+				int result = dao.write_board_phto(board_num, fileNames);
+				System.out.println(result);
+				
 			}
 			
 			
 			
 		   	forward.setRedirect(false);
-	   		forward.setPath("mainPage/mainPage.jsp");
+	   		forward.setPath("/mainPageAction.bo");
 	   		
 	   		return forward;
 		}

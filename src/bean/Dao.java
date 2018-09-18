@@ -1607,27 +1607,35 @@ public class Dao {
 		return rbi;
 	}
 
-	public String write_board_phto(String board_num, String photo_name) {
+	public int write_board_phto(String board_num, ArrayList<String> photo_names) {
 
 		System.out.println("DAO PHOTO Strting");
-		String result = "-5";
-
+		int result = -5;
+		int j;
+		
 		try {
-
-			pstmt = conn.prepareStatement("INSERT INTO board_photo VALUES (?,?)");
-			pstmt.setInt(1, Integer.parseInt(board_num));
-			pstmt.setString(2, photo_name);
-			int i = pstmt.executeUpdate();
-
-			result = i + "";
-
+			
+			for(int i=0;i<photo_names.size();i++) {
+				pstmt = conn.prepareStatement("INSERT INTO board_photo VALUES (?,?)");
+				pstmt.setInt(1, Integer.parseInt(board_num));
+				pstmt.setString(2, photo_names.get(i));
+				j = pstmt.executeUpdate(); //사진 전체경로 보기
+				
+				if(j<=0) {
+					return result;
+				}
+			}
+			
+			result = 1;
 			// =======================================================================
 		} catch (SQLException e) {
-			System.out.println("Login 1");
+			System.out.println("write_board_phto SQL error");
 			e.printStackTrace();
+			return result;
 		} catch (Exception e) {
-			System.out.println("Login 2");
+			System.out.println("write_board_phto Exception");
 			e.printStackTrace();
+			return result;
 		} finally {
 			try {
 				if (rs != null)
