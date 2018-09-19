@@ -868,28 +868,30 @@ public class Dao {
 		return result;
 	}
 
-	public String membership(String user_id, String passwd, String birth) {
+	public int membership(User_Info user) {
 		System.out.println("DAO Insert Strting");
-		String result = "-5";
+		int result = -5;
 
 		try {
 
 			pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message')");
-			pstmt.setString(1, user_id);
-			pstmt.setString(2, passwd);
-			pstmt.setString(3, birth);
+			pstmt.setString(1, user.getId());
+			pstmt.setString(2, user.getPassword());
+			pstmt.setString(3, user.getDateBirth());
 
 			int i = pstmt.executeUpdate();
 
-			result = i + "";
+			result = i;
 
 			// =======================================================================
 		} catch (SQLException e) {
-			System.out.println("Login 1");
+			System.out.println("Join SQL error");
 			e.printStackTrace();
+			return result;
 		} catch (Exception e) {
-			System.out.println("Login 2");
+			System.out.println("Join Exception");
 			e.printStackTrace();
+			return result;
 		} finally {
 			try {
 				if (rs != null)
@@ -1735,10 +1737,10 @@ public class Dao {
 		return board_num;
 	}
 
-	public String check_Id(String ID) {
+	public int check_Id(String ID) {
 
 		System.out.println("DAO Login Strting");
-		String result = "-5";
+		int result = -5;
 
 		try {
 
@@ -1747,18 +1749,20 @@ public class Dao {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				result = "0";
+				result = 0;
 			} else {
-				result = "1";
+				result = 1;
 			}
 
 			// =======================================================================
 		} catch (SQLException e) {
-			System.out.println("Login 1");
+			System.out.println("Check Id SQL error");
 			e.printStackTrace();
+			return result;
 		} catch (Exception e) {
-			System.out.println("Login 2");
+			System.out.println("Check Id Exception");
 			e.printStackTrace();
+			return result;
 		} finally {
 			try {
 				if (rs != null)
