@@ -1,5 +1,6 @@
 package action;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -20,8 +21,10 @@ public class BoardWriteAction implements Action{
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response)
 	{
+		int result = -1;
 		try
 		{	
+			
 			Dao dao = null;
 			ActionForward forward = new ActionForward();
 			HttpSession session = request.getSession();
@@ -31,9 +34,15 @@ public class BoardWriteAction implements Action{
 			request.setCharacterEncoding("UTF-8"); 
 			ServletContext context = request.getServletContext(); // �쁽�옱 �꽌釉붾┸ 媛앹껜
 			String savePath = context.getRealPath("PlitImage"); 
-			int maxSize = 1024*1024*5; 
+			int maxSize = 1024*1024*50; 
 			String encType = "UTF-8"; 
-			String savefile = "img";  
+			String savefile = "img";
+			
+			File saveDir = new File(savePath); // �뵒�젆�넗由ш� �뾾�쓣 寃쎌슦 �깮�꽦
+			if(!saveDir.exists()) 
+			{
+				saveDir.mkdirs(); 
+			}
 			
 			try{ 
 				multi=new MultipartRequest(request, savePath, maxSize, encType, new DefaultFileRenamePolicy()); 
@@ -71,25 +80,19 @@ public class BoardWriteAction implements Action{
 			
 			try {
 				board_num = dao.write_board(content, id, tag, latitude, longitude, category);
+				result = Integer.parseInt(board_num);
 			}catch(Exception c){
 				c.printStackTrace();
 				return null;
 			}
 			
-			
-			
 			if(fileNames.size() != 0) {
 				dao = new Dao();
-				int result = dao.write_board_phto(board_num, fileNames);
-				System.out.println(result);
-				
+				result = dao.write_board_phto(board_num, fileNames);
 			}
-			
-			
-			
-		   	forward.setRedirect(false);
-	   		forward.setPath("/mainPageAction.bo");
-	   		
+
+			response.getWriter().println( result ); // 1 = true, -1 = false
+			// BoardWriteAction은 Ajax로 통신했기 때문에 forward가 필요 없다.
 	   		return forward;
 		}
 		catch(Exception e)

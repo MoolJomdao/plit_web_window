@@ -82,15 +82,27 @@
 		<% 
 			for( int i=0; i<arr.size(); i++ )
 			{
+				String userPhoto = arr.get(i).getUserPhoto(); // 유저이미지
+				userPhoto = ( ( !userPhoto.equals("No Photo") ) ? userPhoto : "./icon/user.png" ); // 있으면 , userPhoto, 없으면 기본 user.png
+				String content = arr.get(i).getContent().replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
+				
+				String boardPhoto = arr.get(i).getBoardPhoto(); // 게시글 작성 글
 		%>
 				<div class="card">
-					<img src=<%= arr.get(i).getBoardPhoto() %> /> <!-- 대표 사진 -->
-					<p> <%= arr.get(i).getContent() %>  </p> <!-- 내용 -->
+		<% 
+				if( boardPhoto != null )
+				{
+		%>
+					<img src= <%= boardPhoto %> /> <!-- 대표 사진 -->
+		<% 
+				}
+		%>
+					<p> <%= content %>  </p> <!-- 내용 -->
 					<h6> 위치 ( 주소 ) </h6> <!-- 주소(위도,경도로 찾아야함) -->
 					<div> 
 						<!-- 사용자 프로필 사진 -->
 						<div class="profile"> 
-						<img src=<%= arr.get(i).getUserPhoto() %> > 
+						<img src=<%= userPhoto %> > 
 						</div> 
 						<!-- 사용자 이름 -->
 						<h5> <%= arr.get(i).getUserId() %>  </h5> 

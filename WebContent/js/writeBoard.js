@@ -64,7 +64,13 @@ $(document).ready(function(){
     $("#submit").click( function( event )
     {
         var id = $("#id_value").val();
+        if( id == undefined )
+        {
+        	alert("로그인이 되어있지 않습니다. 재로그인 요망");
+        	return;
+        }
         var textArea = $("#text_area").val(); // 글내용
+        var str = textArea.replace(/(\r\n|\r|\n)/g, '\\r\\n');
         var locationText = $("#location_text").val();
         event.preventDefault(); // 기존 리다이렉트 되는 이벤트 제거
 
@@ -92,7 +98,13 @@ $(document).ready(function(){
             contentType: false,
             processData: false,
             success: function ( returndata ) {
-      
+            	if( parseInt( returndata ) != -1 ){
+            		alert("게시글 작성 완료");
+            		location.href = '../mainPageAction.bo'
+            	}
+            	else{
+            		alert("게시글 작성 실패");
+            	}
             }
           });
 

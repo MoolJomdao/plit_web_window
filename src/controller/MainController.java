@@ -46,6 +46,7 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 			{
 				action = new BoardWriteAction();
 				forward = action.execute(request, response);
+				return;
 			}if( command.equals("/SignIn.me") )
 			{
 				forward = new ActionForward();

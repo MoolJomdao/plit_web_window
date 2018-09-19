@@ -32,28 +32,14 @@ public class BoardListAction implements Action{
 				return forward;
 	   		}
 	   		
-			BoardDao boardDao = new BoardDao();
-			ArrayList<BoardBean> boardlist  =new ArrayList();
+			Dao boardDao = new Dao();
+			ArrayList<Read_Board_List> boardlist  =new ArrayList();
 			ArrayList<String> imglist = new ArrayList<>();
 			
 		  	int page = 1;
 			int limit = 10; // �ѹ��� �ҷ��� �� ����
 			
-			boardlist = boardDao.getBoardList(page, limit); //����Ʈ�� �޾� ��
-	   				
-			for( int i = 0; i < boardlist.size(); i++ )
-			{
-				String writer = boardlist.get(i).getId();
-				if( writer == null )
-				{
-					imglist.add("icon.jpg");
-				}
-				else
-				{
-					imglist.add(boardDao.getWriterImg(writer));
-				}
-				
-			}
+			boardlist = boardDao.read_board_List(); //����Ʈ�� �޾� ��
 			
 	   		request.setAttribute("page", page); // ���� ������
 			request.setAttribute("boardlist", boardlist); // return ArrayList;
