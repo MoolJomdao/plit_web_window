@@ -7,9 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import action.Action;
+import action.*;
 import action.ActionForward;
-import login.JoinUserAction;
 import login.LoginUserAction;
 
 /* 占싸깍옙占쏙옙, 占싸그아울옙, 회占쏙옙 占쏙옙占쏙옙 */
