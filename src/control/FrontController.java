@@ -105,6 +105,9 @@ public class FrontController
 		case "delete_comment":
 			result.put("result", delete_comment(jobj.getJSONObject("delete_comment_data")));
 			break;
+		case "change_nickname":
+			result.put("result", delete_comment(jobj.getJSONObject("change_nickname_data")));
+			break;
 			
 		}
 		
@@ -113,6 +116,12 @@ public class FrontController
 		result.put(code);*/
 		
 		return result;
+	}
+	
+	
+	private String change_nickname(JSONObject jobj) throws JSONException
+	{
+		return dao.change_nickname(jobj.getString("nickname"), jobj.getString("id"));
 	}
 	
 	private String delete_comment(JSONObject jobj) throws JSONException
