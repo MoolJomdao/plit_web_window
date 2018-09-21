@@ -97,7 +97,7 @@ public class FrontController
             result.put("result", delete_friend(jobj.getJSONObject("delete_friend_data")));
             break;
         case "search_board":
-            result.put("result", delete_friend(jobj.getJSONObject("search_board_data")));
+            result.put("result", search_board(jobj.getJSONObject("search_board_data")));
             break;
 		case "read_board_list2":
 			result.put("result", read_board_list2(jobj.getJSONObject("read_board_list_data")));

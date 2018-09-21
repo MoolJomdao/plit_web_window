@@ -60,8 +60,46 @@ public class DAO
     }
     
     
-    //¸¶ÀÌÆäÀÌÁö read Write
-    //±Û ¸ñ·Ï read--À¯Àú¾ÆÀÌµð·Î (myÆäÀÌÁö¿¡¼­ »ç¿ë)
+    //ë§ˆì´íŽ˜ì´ì§€ read Write
+    //ê¸€ ëª©ë¡ read--ìœ ì €ì•„ì´ë””ë¡œ (myíŽ˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+    
+    
+    public String change_nickname(String nickname,String id)
+    {
+    	    	System.out.println("DAO Insert Strting");
+    	    	String result = "-5";
+    	    
+    	    	try {                                                                                                                                                                                 
+
+    	    		pstmt = conn.prepareStatement("UPDATE user_info SET nickname = ? WHERE id  = ?");
+    	    		pstmt.setString(1, nickname);
+    	    		pstmt.setString(2, id);
+    	    		
+    	    		
+    	    		int i = pstmt.executeUpdate();
+    	    	
+
+    	   //=======================================================================
+    	    	} catch ( SQLException e ) {
+    	    		System.out.println("Login 1");
+    	    		e.printStackTrace();
+    	    	} catch ( Exception e ) {
+    	    		System.out.println("Login 2");
+    	    		e.printStackTrace();
+    	    	} finally {
+    	    		try{	  
+    	    			if ( rs != null ) rs.close();
+    	    		}catch( Exception e ) {}	
+    	    		try{
+    	    			if ( pstmt != null ) pstmt.close();
+    	    		}catch( Exception e ) {}
+    	    		try{
+    	    			if ( conn != null ) conn.close();
+    	    		}catch( Exception e ) {}
+    	    	}
+    	return result;
+    }
+    
     
     
     public String delete_Comment(int board_num,int comment_num)
@@ -115,9 +153,9 @@ public class DAO
 
         try {
 
-                String board_tag = "%#"+tag+"#%";
+                String board_tag = "%"+tag+"%";
 
-                pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_tag ,a.board_latitude,a.board_longitude,a.id, b.user_photo FROM board a, user_info b WHERE a.id = b.id AND a.board_tag LIKE ? ORDER BY a.date_board DESC");
+                pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good,a.board_latitude,a.board_longitude,a.nickname, b.user_photo, a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.board_tag LIKE ? ORDER BY a.date_board DESC");
                 // LIMIT ?,10
                 pstmt.setString(1, board_tag);
                 rs = pstmt.executeQuery();
@@ -143,6 +181,8 @@ public class DAO
                         {
                                 jtmp.put("user_photo",path+"PlitImage/"+rs.getString(8));
                         }
+            			jtmp.put("category",rs.getInt(9));
+            			jtmp.put("comment_cnt",rs.getInt(10));
                         jrr.put(jtmp);
                         count++;
 
@@ -496,7 +536,7 @@ public class DAO
                 	isdel = false;
                 }
             }else{
-                System.out.println("ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+                System.out.println("íŒŒì¼ì´ ì¡´ìž¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
             }             	
     		
     		if(isdel)
@@ -726,7 +766,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
     		// LIMIT ?,10
     		pstmt.setDouble(1, lat);
     		pstmt.setDouble(2, lon);
@@ -897,10 +937,11 @@ public class DAO
     	    
     	    	try {                                                                                                                                                                                 
 
-    	    		pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message')");
+    	    		pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message',?)");
     	    		pstmt.setString(1, user_id);
     	    		pstmt.setString(2, passwd);
     	    		pstmt.setString(3, birth);
+    	    		pstmt.setString(4, user_id);
     	    		
     	    		int i = pstmt.executeUpdate();
     	    		
@@ -993,7 +1034,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.id = ? ORDER BY a.date_board DESC LIMIT ?,10");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.id = ? ORDER BY a.date_board DESC LIMIT ?,10");
     		// LIMIT ?,10
     		pstmt.setString(1, user_name);
     		pstmt.setInt(2, limit);
@@ -1066,7 +1107,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC");
     		// LIMIT ?,10
     		pstmt.setDouble(1, min_lat);
     		pstmt.setDouble(2, max_lat);
@@ -1143,7 +1184,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC LIMIT ?,10");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC LIMIT ?,10");
     		// LIMIT ?,10
     		pstmt.setDouble(1, min_lat);
     		pstmt.setDouble(2, max_lat);
@@ -1238,7 +1279,7 @@ public class DAO
     			JSONObject jtmp = new JSONObject();
     			JSONArray tjrr = new JSONArray();
     			
-    			pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.id,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
+    			pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.nickanme,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
     			pstmt.setDouble(1, rs.getDouble(1));
     			pstmt.setDouble(2, rs.getDouble(2));
     			res = pstmt.executeQuery();
@@ -1389,7 +1430,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.id_respondent, b.user_photo, b.massage FROM friends a, user_info b WHERE a.id_respondent = b.id AND a.id_applicant = ?");
+    		pstmt = conn.prepareStatement("SELECT a.nickname_respondent, b.user_photo, b.massage FROM friends a, user_info b WHERE a.id_respondent = b.id AND a.id_applicant = ?");
     		pstmt.setString(1, user_name);
     		rs = pstmt.executeQuery();
     		
