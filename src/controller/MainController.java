@@ -7,9 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import action.*;
-import login.LoginUserAction;
-import myPage.action.MyPageAction;
+import action.Action;
+import action.ActionForward;
+import action.BoardListAction;
+import action.BoardWriteAction;
+import action.JoinUserAction;
+import action.LoginUserAction;
+import action.StorePageAction;
 
 public class MainController extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 	
@@ -31,22 +35,17 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 				action = new BoardListAction();
 				forward = action.execute(request, response);
 			}		
-			else if( command.equals("/myPage.bo") )
+			else if( command.equals("/storePage.bo") )
 			{
-				action = new MyPageAction();
-				forward = action.execute(request, response);
-			}
-			else if( command.equals("/readBoard.bo") )
-			{
-				action = new BoardReadAction();
+				action = new StorePageAction();
 				forward = action.execute(request, response);
 			}
 			else if( command.equals("/writeBoard.bo") )
 			{
 				action = new BoardWriteAction();
 				forward = action.execute(request, response);
-				return;
-			}if( command.equals("/SignIn.me") )
+			}
+			else if( command.equals("/SignIn.me") )
 			{
 				forward = new ActionForward();
 				forward.setRedirect(false);
@@ -55,15 +54,7 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 			else if( command.equals("/LoginUserAction.me") )
 			{
 				action = new LoginUserAction();
-				try
-				{
-					forward = action.execute(request, response);
-					
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
+				forward = action.execute(request, response);
 			}
 			else if( command.equals("/SignUp.me") )
 			{
@@ -74,14 +65,7 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 			else if( command.equals("/JoinUserAction.me") )
 			{
 				action = new JoinUserAction();
-				try
-				{
-					forward = action.execute(request, response);			
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
+				forward = action.execute(request, response);
 			}
 			
 			/*********************************************************************/

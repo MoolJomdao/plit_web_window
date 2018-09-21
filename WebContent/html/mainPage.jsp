@@ -25,12 +25,12 @@
 			private int category;
 			private int commentCnt;
 		*/
+		String loginStat;
 		HttpSession ses = request.getSession();
 		
 		ArrayList<Read_Board_List> arr = new ArrayList<Read_Board_List>();
 		arr = ( ArrayList<Read_Board_List> )request.getAttribute("rbl");
 		
-		System.out.println( arr.size() );
 	%>
 	
 	
@@ -59,18 +59,11 @@
 		  	   <li> <a href="./html/writeBoard.jsp"> 글쓰기 </a></li>
 		  	   <%
 		  	   		if( ses.getAttribute("id") == null )
-		  	   		{
-		  	   %>
-  			   		<li> <a href="#"> Login </a></li>
-		  	   <%
-		  	   		}
+		  	   			loginStat = "Login";
 		  	   		else
-		  	   		{
+		  	   			loginStat = "Logout";
 		  	   %>
-		  	   		<li> <a href="#"> Logout </a></li>
-		  	   <% 
-		  	   		}
-		  	   %>
+		  	   		<li> <a href="SignIn.me"> <%= loginStat %> </a></li>
 		  	</ul>
 		  </div>
 		</nav>
@@ -84,9 +77,12 @@
 			{
 				String userPhoto = arr.get(i).getUserPhoto(); // 유저이미지
 				userPhoto = ( ( !userPhoto.equals("No Photo") ) ? userPhoto : "./icon/user.png" ); // 있으면 , userPhoto, 없으면 기본 user.png
+				
 				String content = arr.get(i).getContent().replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
 				
 				String boardPhoto = arr.get(i).getBoardPhoto(); // 게시글 작성 글
+				int boardNum =  arr.get(i).getBoardNum();
+				String userId =  arr.get(i).getUserId();
 		%>
 				<div class="card">
 		<% 
@@ -102,10 +98,14 @@
 					<div> 
 						<!-- 사용자 프로필 사진 -->
 						<div class="profile"> 
-						<img src=<%= userPhoto %> > 
+						<form action='storePage.bo' accept-charset='utf-8' method='POST'>
+							<input type='hidden' name='userId' value=<%= userId %>>
+							<input type='submit'>
+						</form>
+							<img src=<%= userPhoto %> onclick=userIconButtonClick() > 
 						</div> 
 						<!-- 사용자 이름 -->
-						<h5> <%= arr.get(i).getUserId() %>  </h5> 
+						<h5> <%= userId %>  </h5> 
 					</div>
 				</div>
 		<% 
@@ -115,3 +115,9 @@
 	</div>
 </body>
 </html>
+
+<script>
+	function userIconButtonClick(){
+		$('input[type=submit]').click();
+	}
+</script>

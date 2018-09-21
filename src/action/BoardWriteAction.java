@@ -12,9 +12,7 @@ import javax.servlet.http.HttpSession;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
-import bean.Dao;
-import dao.BoardDao;
-import db.BoardBean;
+import dao.Dao;
 
 public class BoardWriteAction implements Action{
 
@@ -93,7 +91,8 @@ public class BoardWriteAction implements Action{
 
 			response.getWriter().println( result ); // 1 = true, -1 = false
 			// BoardWriteAction은 Ajax로 통신했기 때문에 forward가 필요 없다.
-	   		return forward;
+			
+	   		return null;
 		}
 		catch(Exception e)
 		{

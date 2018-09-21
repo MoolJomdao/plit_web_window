@@ -1,15 +1,16 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<title></title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="../css/storePage.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/storePage.css">
 	<script type="text/javascript">
 
 		$(document).ready(function(){
 
-			$("html").css("backgroundImage", "url('../icon/store_background.png')"); // 
+			$("html").css("backgroundImage", "url('icon/store_background.png')"); // 
 			var h = $(document).height();
 			$("#frontground").css("height", h); // 불투명한 배경 높이
 
@@ -72,7 +73,7 @@
 	<div class="wrap">
 		<header>
 			<a href="#"> SNS </a>
-			<a href="#"> <img src="../icon/setting3.png" id="setting"></a>
+			<a href="#"> <img src="icon/setting3.png" id="setting"></a>
 			<div id="setting_section">
 				<ul id="setting_menu">
 					<li> 가게명 변경 &nbsp; </li>
@@ -87,7 +88,7 @@
 		<table>
 			<tr>
 				<td class="bigFont bigGap"> STORE NAME </td>
-				<td class="middleFont bigGap rightText"> +999 <img src="../icon/comment.png"></td>
+				<td class="middleFont bigGap rightText"> +999 <img src="icon/comment.png"></td>
 			</tr>
 			<tr>
 				<td colspan="2">
@@ -108,7 +109,7 @@
 		<div class="button">
 			<button> <div> <a href="#"> STORE </a> </div> </button>
 			<button> <div> <a href="#"> REVIEW </a> </div> </button>
-			<button> <div> <a href="./map.html"> LOCATION </a> </div> </button>
+			<button> <div> <a href="html/map.html"> LOCATION </a> </div> </button>
 		</div>
 	</div>
 </body>

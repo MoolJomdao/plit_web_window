@@ -3,19 +3,13 @@ package action;
 //import static db.DBConnection.getConnection;
 
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import action.Action;
-import action.ActionForward;
-import bean.Dao;
-import bean.Read_Board_List;
-import db.UserBean;
 import dao.UserDao;
+import db.UserBean;
 
 
 public class LoginUserAction implements Action

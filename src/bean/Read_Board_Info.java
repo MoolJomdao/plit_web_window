@@ -14,13 +14,13 @@ public class Read_Board_Info {
 	private String userId;
 	private String userPhoto;
 	private int is_Good;
-	private String boardPhoto;
+	private ArrayList<String> boardPhotos;
 	
-	public String getBoardPhoto() {
-		return boardPhoto;
+	public ArrayList<String> getBoardPhoto() {
+		return boardPhotos;
 	}
 	public void setBoardPhoto(String boardPhoto) {
-		this.boardPhoto = boardPhoto;
+		this.boardPhotos.add( boardPhoto );
 	}
 	public int getBoardNum() {
 		return boardNum;

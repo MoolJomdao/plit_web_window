@@ -3,18 +3,12 @@ package action;
 //import static db.DBConnection.getConnection;
 
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import action.Action;
-import action.ActionForward;
-import bean.Dao;
 import bean.User_Info;
-import db.UserBean;
-import dao.UserDao;
+import dao.Dao;
 
 /* ȸ������  */
 public class JoinUserAction implements Action

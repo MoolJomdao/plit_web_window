@@ -107,3 +107,7 @@
 		right: 0;
 	}
 }
+
+input[type=submit]{
+	display : none;
+}

@@ -6,10 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bean.Dao;
 import bean.Read_Board_List;
-import dao.BoardDao;
-import db.BoardBean;
+import dao.Dao;
 
 // �Խñ� ��������
 public class BoardListAction implements Action{
@@ -33,7 +31,7 @@ public class BoardListAction implements Action{
 	   		}
 	   		
 			Dao boardDao = new Dao();
-			ArrayList<Read_Board_List> boardlist  =new ArrayList();
+			ArrayList<Read_Board_List> boardlist =new ArrayList();
 			ArrayList<String> imglist = new ArrayList<>();
 			
 		  	int page = 1;

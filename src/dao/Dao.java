@@ -1,4 +1,4 @@
-package bean;
+package dao;
 
 import java.io.File;
 import java.sql.Connection;
@@ -14,6 +14,17 @@ import javax.sql.DataSource;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import bean.Load_Locate;
+import bean.Read_Board_Info;
+import bean.Read_Board_List;
+import bean.Read_Board_Location;
+import bean.Read_Comment;
+import bean.Read_Friends;
+import bean.Read_Myboard;
+import bean.Read_Mypage;
+import bean.Search_Board;
+import bean.User_Info;
 
 public class Dao {
 
@@ -772,7 +783,7 @@ public class Dao {
 		return result.toString();
 	}
 
-	public int check_good(String board_num, String user_name) {
+	public int check_good(int board_num, String user_name) {
 		System.out.println("DAO Insert Strting");
 		String result = "-5";
 		int i = 0;
@@ -780,7 +791,7 @@ public class Dao {
 		try {
 
 			pstmt = conn.prepareStatement("SELECT * FROM board_good WHERE board_num = ? AND id = ?");
-			pstmt.setInt(1, Integer.parseInt(board_num));
+			pstmt.setInt(1, board_num);
 			pstmt.setString(2, user_name);
 
 			cg_rs = pstmt.executeQuery();
@@ -806,7 +817,7 @@ public class Dao {
 		return i;
 	}
 
-	public String plus_good(String board_num, String user_name) {
+	public String plus_good(int board_num, String user_name) {
 		System.out.println("DAO Insert Strting");
 		String result = "-5";
 
@@ -815,26 +826,26 @@ public class Dao {
 			if (check_good(board_num, user_name) == 0) {
 
 				pstmt = conn.prepareStatement("INSERT INTO board_good VALUES (?,?)");
-				pstmt.setInt(1, Integer.parseInt(board_num));
+				pstmt.setInt(1, board_num);
 				pstmt.setString(2, user_name);
 
 				int i = pstmt.executeUpdate();
 
 				pstmt = conn.prepareStatement("UPDATE board SET good = good+1 WHERE board_num = ?");
-				pstmt.setInt(1, Integer.parseInt(board_num));
+				pstmt.setInt(1, board_num);
 
 				i = pstmt.executeUpdate();
 
 				result = 1 + "";
 			} else {
 				pstmt = conn.prepareStatement("DELETE FROM board_good WHERE board_num = ? AND id = ?");
-				pstmt.setInt(1, Integer.parseInt(board_num));
+				pstmt.setInt(1, board_num);
 				pstmt.setString(2, user_name);
 
 				int i = pstmt.executeUpdate();
 
 				pstmt = conn.prepareStatement("UPDATE board SET good = good-1 WHERE board_num = ?");
-				pstmt.setInt(1, Integer.parseInt(board_num));
+				pstmt.setInt(1, board_num);
 
 				i = pstmt.executeUpdate();
 
@@ -1532,7 +1543,7 @@ public class Dao {
 		return result;
 	}
 
-	public Read_Board_Info read_board_info(String board_num, String user_name) {
+	public Read_Board_Info read_board_info(int board_num, String user_name) {
 			
 		Read_Board_Info rbi = null;
 
@@ -1544,7 +1555,7 @@ public class Dao {
 					"SELECT a.board_num, a.board_content, a.date_board, a.good, a.hits, a.board_latitude,a.board_longitude,a.id,b.user_photo "
 					+ "FROM board a, user_info b "
 					+ "WHERE a.id = b.id AND a.board_num = ?");
-			pstmt.setInt(1, Integer.parseInt(board_num));
+			pstmt.setInt(1, board_num);
 			rs = pstmt.executeQuery();
 
 			rs.next();
