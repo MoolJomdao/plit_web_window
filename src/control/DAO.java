@@ -104,7 +104,7 @@ public class DAO
     		pstmt = conn.prepareStatement("UPDATE user_info SET latitude = ? , longitude = ? WHERE id = ?");
     		pstmt.setDouble(1, latitude);
     		pstmt.setDouble(2, longitude);
-    		pstmt.setString(1, id);
+    		pstmt.setString(3, id);
     		
     		int i = pstmt.executeUpdate();
    //=======================================================================	
