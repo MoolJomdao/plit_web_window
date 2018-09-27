@@ -217,9 +217,10 @@ public class DAO
 
                 String board_tag = "%"+tag+"%";
 
-                pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good,a.board_latitude,a.board_longitude,b.nickname, b.user_photo, a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.board_tag LIKE ? ORDER BY a.date_board DESC");
+                pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good,a.board_latitude,a.board_longitude,b.nickname, b.user_photo, a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND (a.board_tag LIKE ? OR a.board_content LIKE ?) ORDER BY a.date_board DESC");
                 // LIMIT ?,10
                 pstmt.setString(1, board_tag);
+                pstmt.setString(2, board_tag);
                 rs = pstmt.executeQuery();
 
                 JSONArray jrr = new JSONArray();
