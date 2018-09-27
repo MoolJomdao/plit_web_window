@@ -39,10 +39,10 @@
 		<div class="wrap">
 			<!-- 위치 부분 -->
 			<div class="location_section">
-				<input placeholder="위치 입력..."> </input>
+				<div>위치 입력...</div>
 				<button id="location_button" type="button" value="위치받아오기"> </button>
-				<input id="lat" type="hidden">
-                <input id="lon" type="hidden">
+				<input id="lat" type="hidden" value="36.322473">
+                <input id="lng" type="hidden" value="127.412501">
 			</div>
 
 			<div class="content_section" id="text_box"> 
@@ -60,3 +60,26 @@
 	</form>
 </body>
 </html>
+
+<script>
+	var openWin;
+
+	function openChild()
+	{
+	    // window.name = "부모창 이름"; 
+	    window.name = "parentForm";
+	    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+	    openWin = window.open("writeMap.jsp",
+	            "childForm", "width=1280, height=960, resizable = yes, scrollbars = no");    
+	    
+	    
+	}
+
+
+	$(function(){
+		$('.location_section button').click(function(){
+			//openChild();
+			location.href = "writeMap.jsp";
+		});
+	});
+</script>
