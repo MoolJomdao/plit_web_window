@@ -885,7 +885,7 @@ public class Dao {
 
 		try {
 
-			pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message',?)");
+			pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message',?,0,0)");
 			pstmt.setString(1, user.getId());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getDateBirth());
@@ -1075,7 +1075,7 @@ public class Dao {
 				pstmt.setInt(1, rbl.getBoardNum());
 				photoResult = pstmt.executeQuery();
 				
-				if( photoResult.next() ) 
+				if( photoResult.next() )
 					rbl.setBoardPhoto(path + "PlitImage/" + photoResult.getString(2));
 				
 				

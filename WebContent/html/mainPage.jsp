@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="bean.Read_Board_List"%>
+<%@page import="db.GpsToAddress"%>
 
 <!DOCTYPE html>
 <html>
 <head>
+<META HTTP-EQUIV="contentType" CONTENT="text/html;charset=UTF-8">
 	<title></title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -13,6 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	
 	<% 
+		request.setCharacterEncoding("utf-8");
 		/*
 			private int boardNum;
 			private String content;
@@ -81,20 +84,33 @@
 				String content = arr.get(i).getContent().replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
 				
 				String boardPhoto = arr.get(i).getBoardPhoto(); // 게시글 작성 글
+				boardPhoto = new String(boardPhoto.getBytes("8859_1"),"utf-8");
+
+				
 				int boardNum =  arr.get(i).getBoardNum();
 				String userId =  arr.get(i).getUserId();
+				
+				double lat = arr.get(i).getBoardLatitude();
+				double lng = arr.get(i).getBoardLongitude();
+				String address = "주소 없음";
+				// 지오코더 이용하여 주소 값 가져오기
+				if( lat != 0.0 && lng != 0.0 )
+				{
+					GpsToAddress GTA = new GpsToAddress( lat, lng );
+					address = GTA.getAddress();
+				}
 		%>
 				<div class="card">
 		<% 
 				if( boardPhoto != null )
 				{
 		%>
-					<img src= <%= boardPhoto %> /> <!-- 대표 사진 -->
+					<img src='<%=boardPhoto%>'> <!-- 대표 사진 -->
 		<% 
 				}
 		%>
 					<p> <%= content %>  </p> <!-- 내용 -->
-					<h6> 위치 ( 주소 ) </h6> <!-- 주소(위도,경도로 찾아야함) -->
+					<h6> <%= address %> </h6> <!-- 주소(위도,경도로 찾아야함) -->
 					<div> 
 						<!-- 사용자 프로필 사진 -->
 						<div class="profile"> 

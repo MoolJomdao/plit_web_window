@@ -1,8 +1,9 @@
-/control/
-<<<<<<< HEAD
-/dao/
-/action/
 /bean/
+/control/
 /controller/
-=======
->>>>>>> branch 'master' of https://github.com/MoolJomdao/plit_web_window.git
+/dao/
+/db/
+/action/
+/GpsToAddress.class
+/usefuleClass/
+/useful/

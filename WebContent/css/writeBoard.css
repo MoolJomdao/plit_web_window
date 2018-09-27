@@ -48,7 +48,9 @@
 	border: none;
 	outline-style: none;
 	background-color: transparent;
-	display : inline;
+	text-align : center;
+	line-height : 60px;
+	display : inline-block;
 }
 
 .location_section button{

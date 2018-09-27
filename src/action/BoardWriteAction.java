@@ -1,7 +1,9 @@
 package action;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
@@ -54,8 +56,8 @@ public class BoardWriteAction implements Action{
 			String id = (String)session.getAttribute("id");
 			String content = (String) (multi.getParameter("content") == null ? null:multi.getParameter("content"));
 			String tag = (String) (multi.getParameter("tag") == null ? null:multi.getParameter("tag"));
-			double latitude = (double) (multi.getParameter("latitude") == null ? 0.0:multi.getParameter("latitude"));
-			double longitude = (double) (multi.getParameter("longitude") == null ? 0.0:multi.getParameter("longitude"));
+			double latitude = (double) Double.parseDouble( multi.getParameter("lat") );
+			double longitude = (double) Double.parseDouble( multi.getParameter("lng") );
 			int category = (int) (multi.getParameter("category") == null ? 0:multi.getParameter("category"));
 			
 			Enumeration Names = multi.getFileNames(); 
@@ -64,9 +66,24 @@ public class BoardWriteAction implements Action{
 			{
 				while( Names.hasMoreElements() ) 
 				{
+					String name, ext, newName="";
+				    String now = new SimpleDateFormat("yyyyMMddHmsS").format(new Date());  //현재시간
+
 					String strName = Names.nextElement().toString();
 					String fileName = multi.getFilesystemName(strName);
-					fileNames.add( fileName ); 
+					
+			        int index = fileName.lastIndexOf("."); // 확장자 앞 . 위치
+			        if( index != -1) {
+			        	name = (Math.random() * 1000) + now;
+			        	ext = fileName.substring(index);
+			        	newName = name  + ext;
+			        }
+					
+					File oldFile = new File( savePath + "\\" + fileName );
+					File newFile = new File( savePath + "\\" + newName );
+					oldFile.renameTo( newFile );
+					
+					fileNames.add( newName ); 
 				}
 			}
 			else

@@ -72,6 +72,8 @@ $(document).ready(function(){
         var textArea = $("#text_area").val(); // 글내용
         var str = textArea.replace(/(\r\n|\r|\n)/g, '\\r\\n');
         var locationText = $("#location_text").val();
+		var lat = document.getElementById("lat").value;
+		var lng = document.getElementById("lng").value;
         event.preventDefault(); // 기존 리다이렉트 되는 이벤트 제거
 
         // 이미지 데이터 가져오기 
@@ -83,7 +85,8 @@ $(document).ready(function(){
         }
         
         formData.append("id", id);
-        formData.append("location", locationText);
+        formData.append("lat", lat);
+        formData.append("lng", lng);
         formData.append("content", textArea);
         // 이미지 formData 넣기, 이미지 더 보내고 싶으면 formData.append('img', $(this)[1] ); 첫번째면 0, 두번째 이미지면 1 세번째 이미지면 2 반드시 key 값을 'img'로
         // 글도 같이 보낼 수 있다 formData.append('key', 'value' );

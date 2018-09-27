@@ -1,9 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<title></title>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1O3_xjyaGDGbrQ38g-i3kjUpCgjuWEWw&callback=initMap"
-  		type="text/javascript"></script>
+  type="text/javascript"></script>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<!-- GoogoleMap Asynchronously Loading the API ********************************************* -->
 	<style type="text/css">
@@ -11,30 +13,17 @@
 			margin: 0px;
 		}
 	</style>  
-	
-  
-</head>
-<body>
-	
-	<input id="lat" type="hidden" value="1">
-    <input id="lng" type="hidden" value="1">
-	
-	<div id="map-canvas" style="width: 100%; height: 400px"></div>
-
-</body>
-</html>
-
-  	<script>
+	<script>
+		var address, currentLat, currentLng;
 		
 		$(document).ready(function(){
 			$("#map-canvas").css("height", $(document).height());
 			
-		    google.maps.event.addDomListener(window, 'load', initialize);
 		});
 		
       function initialize() 
       {
-    	  alert( document.getElementById("lat").value + ", " + document.getElementById("lon").value );
+    	  //alert( document.getElementById("lat").value + ", " + document.getElementById("lon").value );
         var mapLocation = new google.maps.LatLng('36.322473', '127.412501'); // 지도에서 가운데로 위치할 위도와 경도
         var markLocation = new google.maps.LatLng('36.322473', '127.412501'); // 마커가 위치할 위도와 경도
          
@@ -82,11 +71,11 @@
         	geocoder.geocode( { 'latLng' : location },
         		function( results, status ){
         			if( status == google.maps.GeocoderStatus.OK ){
-        				var address = results[0].formatted_address;
-        				var lat = results[0].geometry.location.lat();
-        				var lng = results[0].geometry.location.lng();
+        				address = results[0].formatted_address;
+        				currentLat = results[0].geometry.location.lat();
+        				currentLng = results[0].geometry.location.lng();
         				
-        				alert("address : " + address + "\n, lat : " + lat + "\n, lng : " + lng );
+        				alert("address : " + address + "\n, lat : " + currentLat + "\n, lng : " + currentLng );
         			}
         			else{
         				alert("Geocoder failed due to : " + status );
@@ -105,6 +94,45 @@
 
         });
       }
-      
-      
+
+	  google.maps.event.addDomListener(window, 'load', initialize); // window가 
+
+	  function clickSend(){
+		  	opener.document.getElementById("address").value = address;
+			opener.document.getElementById("lat").value = currentLat;
+			opener.document.getElementById("lng").value = currentLng;
+			var sendEvent = opener.document.getElementById("sendEvent");
+			$(sendEvent).click();
+			window.close();
+	  }
 	</script>
+	
+	<style>
+		#send{
+			position : fixed;
+			width : 200px;
+			height : 50px;
+			bottom : 5px;
+			left : 5px;
+		}
+		#cancel{
+			position : fixed;
+			width : 200px;
+			height : 50px;
+			bottom : 5px;
+			left : 210px;
+		}
+	</style>
+</head>
+<body>
+	
+	<input id="lat" type="hidden" value="1">
+    <input id="lng" type="hidden" value="1">
+	
+	<div id="map-canvas" style="width: 100%; height: 100%"></div>
+	
+	<button type="button" id="send" onclick="clickSend()" >위치값 전송</button>
+	<button type="button" id="cancel" onclick="window.close()" >취소</button>
+
+</body>
+</html>
