@@ -885,10 +885,11 @@ public class Dao {
 
 		try {
 
-			pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message')");
+			pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message',?)");
 			pstmt.setString(1, user.getId());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getDateBirth());
+			pstmt.setString(4, user.getId());
 
 			int i = pstmt.executeUpdate();
 

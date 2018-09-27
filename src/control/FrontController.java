@@ -106,7 +106,7 @@ public class FrontController
 			result.put("result", delete_comment(jobj.getJSONObject("delete_comment_data")));
 			break;
 		case "change_nickname":
-			result.put("result", delete_comment(jobj.getJSONObject("change_nickname_data")));
+			result.put("result", change_nickname(jobj.getJSONObject("change_nickname_data")));
 			break;
 			
 		}

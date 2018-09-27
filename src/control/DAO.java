@@ -134,7 +134,7 @@ public class DAO
 
                 String board_tag = "%"+tag+"%";
 
-                pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good,a.board_latitude,a.board_longitude,a.nickname, b.user_photo, a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.board_tag LIKE ? ORDER BY a.date_board DESC");
+                pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good,a.board_latitude,a.board_longitude,b.nickname, b.user_photo, a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.board_tag LIKE ? ORDER BY a.date_board DESC");
                 // LIMIT ?,10
                 pstmt.setString(1, board_tag);
                 rs = pstmt.executeQuery();
@@ -745,7 +745,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
     		// LIMIT ?,10
     		pstmt.setDouble(1, lat);
     		pstmt.setDouble(2, lon);
@@ -966,7 +966,7 @@ public class DAO
     		rs.next();
     		
     		System.out.println("mypage json start");
-    		result.put("user_id",rs.getString(1));
+    		result.put("user_id",rs.getString(7));
     		result.put("date_birth",rs.getString(3));
     		result.put("date_member",rs.getString(4));
     		if(rs.getString(5).equals("No Photo"))
@@ -1013,7 +1013,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.id = ? ORDER BY a.date_board DESC LIMIT ?,10");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.id = ? ORDER BY a.date_board DESC LIMIT ?,10");
     		// LIMIT ?,10
     		pstmt.setString(1, user_name);
     		pstmt.setInt(2, limit);
@@ -1086,7 +1086,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC");
     		// LIMIT ?,10
     		pstmt.setDouble(1, min_lat);
     		pstmt.setDouble(2, max_lat);
@@ -1163,7 +1163,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC LIMIT ?,10");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC LIMIT ?,10");
     		// LIMIT ?,10
     		pstmt.setDouble(1, min_lat);
     		pstmt.setDouble(2, max_lat);
@@ -1409,7 +1409,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.nickname_respondent, b.user_photo, b.massage FROM friends a, user_info b WHERE a.id_respondent = b.id AND a.id_applicant = ?");
+    		pstmt = conn.prepareStatement("SELECT a.id_respondent, b.user_photo, b.massage FROM friends a, user_info b WHERE a.id_respondent = b.id AND a.id_applicant = ?");
     		pstmt.setString(1, user_name);
     		rs = pstmt.executeQuery();
     		
