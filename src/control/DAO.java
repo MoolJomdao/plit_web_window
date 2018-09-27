@@ -44,8 +44,91 @@ public class DAO
     }
     
     
-    //마이페이지 read Write
-    //글 목록 read--유저아이디로 (my페이지에서 사용)
+    //留덉씠�럹�씠吏� read Write
+    //湲� 紐⑸줉 read--�쑀���븘�씠�뵒濡� (my�럹�씠吏��뿉�꽌 �궗�슜)
+    
+    
+    
+    
+ 
+    public String read_myLocation(String id)
+    {
+    	JSONObject result = new JSONObject();
+    	
+    	
+    	try {                                                                                                                                                                                 
+
+
+    		pstmt = conn.prepareStatement("SELECT latitude, longitude FROM user_info WHERE id = ?");
+    		// LIMIT ?,10
+    		pstmt.setString(1, id);
+    		rs = pstmt.executeQuery();
+    		
+    		if(rs.next());
+    		{
+    	
+    		result.put("latitude",rs.getDouble(1));
+    		result.put("longitude",rs.getDouble(2));
+
+    		} 		
+    		
+
+   //=======================================================================
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    		}catch( Exception e ) {}	
+    		try{
+    			if ( pstmt != null ) pstmt.close();
+    		}catch( Exception e ) {}
+    		try{
+    			if ( conn != null ) conn.close();
+    		}catch( Exception e ) {}
+    	}
+    	
+    	return result.toString();
+    }
+
+    
+    public String change_myLocation(double latitude, double longitude ,String id){
+    	System.out.println("DAO Insert Strting");
+    	String result = "-5";
+    
+    	try {                                                                                                                                                                                 
+    		pstmt = conn.prepareStatement("UPDATE user_info SET latitude = ? , longitude = ? WHERE id = ?");
+    		pstmt.setDouble(1, latitude);
+    		pstmt.setDouble(2, longitude);
+    		pstmt.setString(1, id);
+    		
+    		int i = pstmt.executeUpdate();
+   //=======================================================================	
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    		}catch( Exception e ) {}	
+    		try{
+    			if ( pstmt != null ) pstmt.close();
+    		}catch( Exception e ) {}
+    		try{
+    			if ( conn != null ) conn.close();
+    		}catch( Exception e ) {}
+    	}
+    	return result;
+}
+
+    
     
     
     public String change_nickname(String nickname,String id){
@@ -515,7 +598,7 @@ public class DAO
                 	isdel = false;
                 }
             }else{
-                System.out.println("파일이 존재하지 않습니다.");
+                System.out.println("�뙆�씪�씠 議댁옱�븯吏� �븡�뒿�땲�떎.");
             }             	
     		
     		if(isdel)
@@ -916,7 +999,7 @@ public class DAO
     	    
     	    	try {                                                                                                                                                                                 
 
-    	    		pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message',?)");
+    	    		pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message',?,0,0)");
     	    		pstmt.setString(1, user_id);
     	    		pstmt.setString(2, passwd);
     	    		pstmt.setString(3, birth);
@@ -978,6 +1061,8 @@ public class DAO
     			result.put("user_photo",path+"PlitImage/"+rs.getString(5));
 			}
     		result.put("massage",rs.getString(6));
+    		result.put("latitude",rs.getDouble(8));
+    		result.put("longitude",rs.getDouble(9));
     		System.out.println("mypage json end");
     			
     		

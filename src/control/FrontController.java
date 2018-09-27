@@ -108,6 +108,12 @@ public class FrontController
 		case "change_nickname":
 			result.put("result", change_nickname(jobj.getJSONObject("change_nickname_data")));
 			break;
+		case "change_myLocation":
+			result.put("result", change_myLocation(jobj.getJSONObject("change_myLocation_data")));
+			break;
+		case "read_myLocation":
+			result.put("result", read_myLocation(jobj.getJSONObject("read_myLocation_data")));
+			break;
 			
 		}
 		
@@ -118,6 +124,16 @@ public class FrontController
 		return result;
 	}
 	
+	
+	private String read_myLocation(JSONObject jobj) throws JSONException
+	{
+		return dao.read_myLocation(jobj.getString("id"));
+	}
+	
+	private String change_myLocation(JSONObject jobj) throws JSONException
+	{
+		return dao.change_myLocation(jobj.getDouble("latitude"),jobj.getDouble("longitude"), jobj.getString("id"));
+	}
 	
 	private String change_nickname(JSONObject jobj) throws JSONException
 	{
