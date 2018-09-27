@@ -17,16 +17,16 @@ import action.StorePageAction;
 
 public class MainController extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 	
-	// doGet, doPost 占쏙옙청 占쏙옙占� 占쏙옙 占쌨쇽옙占썲를 占쏙옙占쏙옙
+	
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) 
 				throws ServletException, IOException {
 
-			request.setCharacterEncoding("UTF-8"); // 諛쏅뒗嫄� UTF-8 �씤肄붾뵫
-			response.setContentType("text/html;charset=UTF-8"); // 蹂대궪 �븣�룄 UTF-8濡� �씤肄붾뵫
+			request.setCharacterEncoding("UTF-8"); 
+			response.setContentType("text/html;charset=UTF-8"); 
 			
-			String RequestURI = request.getRequestURI();  // 占쏙옙占쏙옙占쏙옙트 & 占쏙옙占쏙옙 占쏙옙占�
-			String contextPath = request.getContextPath();// 占쏙옙占쏙옙占쏙옙트 占쏙옙占�
-			String command = RequestURI.substring(contextPath.length()); // 占쏙옙占싹몌옙
+			String RequestURI = request.getRequestURI();  
+			String contextPath = request.getContextPath();
+			String command = RequestURI.substring(contextPath.length()); 
 			ActionForward forward = null;
 			Action action = null;
 			

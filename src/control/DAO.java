@@ -17,44 +17,28 @@ import org.json.JSONObject;
 
 public class DAO 
 {
-
     Connection conn = null;
-
     PreparedStatement pstmt = null;
-
     ResultSet rs = null;
     
-
-    String path = "http://39.127.8.20:8080/";
+    String path = "http://104.198.86.112:8080/";
     String path2 = "/var/lib/tomcat7/webapps/ROOT";
     
-    
-    public DAO()
-
-    
+    public DAO()  
     {
     	 try {
-
     		 System.out.println("connecting DB");
-
     	        Context initContext = new InitialContext();               
-
     	        DataSource ds = (DataSource) initContext.lookup("java:comp/env/jdbc/CUBRIDDS");     
-
     	        conn = ds.getConnection();                   
-    	        
     	        System.out.println("connect complete");
 
     	      } catch ( SQLException e ) {
     	    	  System.out.println("DAO 1");
-
     	              e.printStackTrace();
-
     	      } catch ( Exception e ) {
     	    	  System.out.println("DAO 2");
-
     	              e.printStackTrace();
-
     	      } 
     	         
     }
@@ -64,21 +48,16 @@ public class DAO
     //글 목록 read--유저아이디로 (my페이지에서 사용)
     
     
-    public String change_nickname(String nickname,String id)
-    {
+    public String change_nickname(String nickname,String id){
     	    	System.out.println("DAO Insert Strting");
     	    	String result = "-5";
     	    
     	    	try {                                                                                                                                                                                 
-
     	    		pstmt = conn.prepareStatement("UPDATE user_info SET nickname = ? WHERE id  = ?");
     	    		pstmt.setString(1, nickname);
     	    		pstmt.setString(2, id);
     	    		
-    	    		
     	    		int i = pstmt.executeUpdate();
-    	    		
-
     	   //=======================================================================
     	    	} catch ( SQLException e ) {
     	    		System.out.println("Login 1");
