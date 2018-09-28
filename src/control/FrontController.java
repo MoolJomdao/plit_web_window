@@ -114,6 +114,8 @@ public class FrontController
 		case "read_myLocation":
 			result.put("result", read_myLocation(jobj.getJSONObject("read_myLocation_data")));
 			break;
+		case "comment_num":
+			result.put("result", write_comment_photo(jobj));
 			
 		}
 		
@@ -124,6 +126,11 @@ public class FrontController
 		return result;
 	}
 	
+	
+	private String write_comment_photo(JSONObject jobj) throws JSONException
+	{
+		return dao.write_comment_phto(jobj.getInt("num"), jobj.getString("name"));
+	}
 	
 	private String read_myLocation(JSONObject jobj) throws JSONException
 	{
@@ -271,7 +278,11 @@ public class FrontController
 	{
 		return dao.write_Comment(jobj.getString("Board_num"), 
 								jobj.getString("user_name"),
-								jobj.getString("content"));
+								jobj.getString("content"),
+								jobj.getString("pw"),
+								jobj.getString("nickname"),
+								jobj.getInt("guestPhoto"));
+			
 	}
 	
 	
