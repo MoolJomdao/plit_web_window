@@ -46,7 +46,7 @@
 		  <div class="container-fluid">
 		    <div class="navbar-header">
 		    	<!-- 로고 부분 ( 브랜드 명 )-->
-		     	<a class="navbar-brand" href="#"> SNS </a>
+		     	<a class="navbar-brand" href="mainPageAction.bo"> SNS </a>
 		    </div>
 		    
 		    <!-- 메뉴 부분 
@@ -84,8 +84,6 @@
 				String content = arr.get(i).getContent().replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
 				
 				String boardPhoto = arr.get(i).getBoardPhoto(); // 게시글 작성 글
-				boardPhoto = new String(boardPhoto.getBytes("8859_1"),"utf-8");
-
 				
 				int boardNum =  arr.get(i).getBoardNum();
 				String userId =  arr.get(i).getUserId();
@@ -97,7 +95,7 @@
 				if( lat != 0.0 && lng != 0.0 )
 				{
 					GpsToAddress GTA = new GpsToAddress( lat, lng );
-					address = GTA.getAddress();
+					address = GTA.getAddress().replace("대한민국 ", "");
 				}
 		%>
 				<div class="card">
@@ -116,12 +114,12 @@
 						<div class="profile"> 
 						<form action='storePage.bo' accept-charset='utf-8' method='POST'>
 							<input type='hidden' name='userId' value=<%= userId %>>
-							<input type='submit'>
+							<input class="send" type='submit'>
 						</form>
-							<img src=<%= userPhoto %> onclick=userIconButtonClick() > 
+							<img src=<%= userPhoto %> onclick=userIconButtonClick(<%= i %>) > 
 						</div> 
 						<!-- 사용자 이름 -->
-						<h5> <%= userId %>  </h5> 
+						<h5 onclick=userIconButtonClick(<%= i %>)> <%= userId %>  </h5> 
 					</div>
 				</div>
 		<% 
@@ -133,7 +131,8 @@
 </html>
 
 <script>
-	function userIconButtonClick(){
-		$('input[type=submit]').click();
+	function userIconButtonClick( i ){
+		var inputs = document.getElementsByClassName("send");
+		$(inputs[i]).click();
 	}
 </script>

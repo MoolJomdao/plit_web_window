@@ -34,9 +34,6 @@
 		<div> <label> Let's play XD </label> </div> <br>
 		<form method="post">
 		<table>
-			<tr>
-                <td> <input id="birth" type="text" placeholder="yyyymmdd" name="birth"></input> </td>
-            </tr>
             <tr>
                 <td> <input id="id" type="text" placeholder="choose your id" name="id"></input> </td>
             </tr>

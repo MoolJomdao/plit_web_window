@@ -14,7 +14,9 @@
 		}
 	</style>  
 	<script>
-		var address, currentLat, currentLng;
+		var address = undefined;
+		var currentLat = undefined;
+		var currentLng = undefined;;
 		
 		$(document).ready(function(){
 			$("#map-canvas").css("height", $(document).height());
@@ -23,9 +25,13 @@
 		
       function initialize() 
       {
-    	  //alert( document.getElementById("lat").value + ", " + document.getElementById("lon").value );
-        var mapLocation = new google.maps.LatLng('36.322473', '127.412501'); // 지도에서 가운데로 위치할 위도와 경도
-        var markLocation = new google.maps.LatLng('36.322473', '127.412501'); // 마커가 위치할 위도와 경도
+    	  var preLat = opener.document.getElementById("lat").value;
+    	  var preLng = opener.document.getElementById("lng").value;
+    	  preLat = (preLat != 0.0) ? preLat : 36.322473;
+    	  preLng = (preLng != 0.0) ? preLng : 127.412501;
+    	  
+        var mapLocation = new google.maps.LatLng(preLat, preLng); // 지도에서 가운데로 위치할 위도와 경도
+        var markLocation = new google.maps.LatLng(preLat, preLng); // 마커가 위치할 위도와 경도
          
         var mapOptions = {
           center: mapLocation, // 지도에서 가운데로 위치할 위도와 경도(변수)
@@ -71,11 +77,11 @@
         	geocoder.geocode( { 'latLng' : location },
         		function( results, status ){
         			if( status == google.maps.GeocoderStatus.OK ){
-        				address = results[0].formatted_address;
+        				address = results[0].formatted_address.replace("대한민국 ", "");
         				currentLat = results[0].geometry.location.lat();
         				currentLng = results[0].geometry.location.lng();
         				
-        				alert("address : " + address + "\n, lat : " + currentLat + "\n, lng : " + currentLng );
+        				alert("주소 : " + address + "\n위도 : " + currentLat + "\n경도 : " + currentLng );
         			}
         			else{
         				alert("Geocoder failed due to : " + status );
@@ -98,6 +104,11 @@
 	  google.maps.event.addDomListener(window, 'load', initialize); // window가 
 
 	  function clickSend(){
+		  if( address == undefined ){
+			  alert("위치를 지정해주세요.");
+			  return;
+		  }
+		  
 		  	opener.document.getElementById("address").value = address;
 			opener.document.getElementById("lat").value = currentLat;
 			opener.document.getElementById("lng").value = currentLng;
@@ -105,6 +116,10 @@
 			$(sendEvent).click();
 			window.close();
 	  }
+	  
+	  window.onresize = function(){
+		  $('#map-canvas').css("height", window.innerHeight );
+	  };
 	</script>
 	
 	<style>

@@ -123,6 +123,10 @@ button a, button a:hover, button a:focus, button a:visited{
 	cursor: pointer;
 }
 
+#setting_menu input{
+   display: none;
+}
+
 /**************************/
 
 @media (max-height: 600px) {
@@ -175,3 +179,4 @@ button a, button a:hover, button a:focus, button a:visited{
 		width: 100%;
 	}
 }
+

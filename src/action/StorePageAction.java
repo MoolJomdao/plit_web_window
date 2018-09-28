@@ -1,9 +1,12 @@
 package action;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import dao.BoardDao;
+import dao.StorePageDao;
 
 public class StorePageAction implements Action{
 
@@ -13,10 +16,13 @@ public class StorePageAction implements Action{
 		try
 		{
 			ActionForward forward = new ActionForward();
-			
-			String userid = request.getParameter("userId"); // userId who write this board
+
+			HttpSession session = request.getSession();
+			String sessionId = (String)session.getAttribute("id"); //
+			String clickId = request.getParameter("userId");
 	   		
-			BoardDao dao = new BoardDao();
+			StorePageDao dao = new StorePageDao();
+			request.setAttribute( "mypage", dao.read_myPage(clickId) );
 			
 	   		forward.setRedirect(false);
 	   		forward.setPath("html/storePage.jsp");

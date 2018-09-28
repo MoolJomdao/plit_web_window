@@ -28,7 +28,7 @@
 			  <div class="container-fluid">
 			    <div class="navbar-header">
 			    	<!-- 로고 부분 ( 브랜드 명 )-->
-			     	<a class="navbar-brand" href="#"> SNS </a>
+			     	<a class="navbar-brand" href="../mainPageAction.bo"> SNS </a>
 			    </div>
 
 			    <!-- 우측 nav -->

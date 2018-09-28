@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,8 +19,12 @@
 			$("#map-canvas").css("height", $(document).height());
 		});
       function initialize() {
-        var mapLocation = new google.maps.LatLng('36.322473', '127.412501'); // 지도에서 가운데로 위치할 위도와 경도
-        var markLocation = new google.maps.LatLng('36.322473', '127.412501'); // 마커가 위치할 위도와 경도
+    	  var preLat = opener.document.getElementById("lat").value;
+    	  var preLng = opener.document.getElementById("lng").value;
+    	  preLat = (preLat != 0.0) ? preLat : 36.322473;
+    	  preLng = (preLng != 0.0) ? preLng : 127.412501;
+          var mapLocation = new google.maps.LatLng(preLat, preLng); // 지도에서 가운데로 위치할 위도와 경도
+          var markLocation = new google.maps.LatLng(preLat, preLng); // 마커가 위치할 위도와 경도
          
         var mapOptions = {
           center: mapLocation, // 지도에서 가운데로 위치할 위도와 경도(변수)
@@ -48,8 +53,8 @@
 //             info: '말풍선 안에 들어갈 내용',
 //             title: ' 마커에 마우스 포인트를 갖다댔을 때 뜨는 타이틀' 
         });
-         
-        var content = "말풍선 안에 들어갈 내용";
+        var classes = opener.document.getElementsByClassName("settingItem")[0];
+        var content = classes.innerText;
          
         // 마커를 클릭했을 때의 이벤트. 말풍선
         var infowindow = new google.maps.InfoWindow({ content: content});

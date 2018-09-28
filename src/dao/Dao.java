@@ -888,7 +888,7 @@ public class Dao {
 			pstmt = conn.prepareStatement("INSERT INTO user_info VALUES (?,?,?,SYSDATETIME,'No Photo','No Message',?,0,0)");
 			pstmt.setString(1, user.getId());
 			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getDateBirth());
+			pstmt.setString(3, "0");
 			pstmt.setString(4, user.getId());
 
 			int i = pstmt.executeUpdate();
@@ -930,7 +930,6 @@ public class Dao {
 
 		try {
 
-			System.out.println(user_name);
 			pstmt = conn.prepareStatement("SELECT * FROM user_info WHERE id=?");
 			// LIMIT ?,10
 			pstmt.setString(1, user_name);
@@ -939,8 +938,6 @@ public class Dao {
 			rs.next();
 
 			read_board.setUserId(rs.getString(1));
-			read_board.setDateBirth(rs.getString(3));
-			read_board.setDateMember(rs.getString(4));
 
 			if (rs.getString(5).equals("No Photo")) {
 				read_board.setUserPhoto(rs.getString(5));

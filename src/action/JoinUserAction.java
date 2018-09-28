@@ -31,7 +31,7 @@ public class JoinUserAction implements Action
 			// SignUp.jsp�� form�±��� ������ ������ ����
 			user.setId(request.getParameter("id"));
 			user.setPassword(request.getParameter("pw"));
-			user.setDateBirth(request.getParameter("birth"));
+			user.setDateBirth("0");
 			user.setUserPhoto("No Photo");
 			user.setMassage("No Massage");
 			
