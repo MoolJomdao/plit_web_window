@@ -38,54 +38,33 @@ public class StorePageDao {
 			return;
 		}
 	}
-
-	public Read_Mypage read_myPage(String user_name) {
 	
-		Read_Mypage read_board = new Read_Mypage();
-	
-		try {
-	
-			System.out.println(user_name);
-			pstmt = con.prepareStatement("SELECT * FROM user_info WHERE id=?");
-			// LIMIT ?,10
-			pstmt.setString(1, user_name);
-			rs = pstmt.executeQuery();
-	
-			rs.next();
-	
-			read_board.setUserId(rs.getString(1));
-			read_board.setDateBirth(rs.getString(3));
-			read_board.setDateMember(rs.getString(4));
-	
-			if (rs.getString(5).equals("No Photo")) {
-				read_board.setUserPhoto(rs.getString(5));
-			} else {
-				read_board.setUserPhoto(path + "PlitImage/" + rs.getString(5));
-			}
-			read_board.setMassage(rs.getString(6));
-	
-			// =======================================================================
-		} catch (SQLException e) {
-			System.out.println("Read_Mypage SQL error");
-			e.printStackTrace();
-			return null;
-		} catch (Exception e) {
-			System.out.println("Read_Mypage Exception");
-			e.printStackTrace();
-			return null;
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (pstmt != null)
-					pstmt.close();
-				if (con != null)
-					con.close();
-			} catch (Exception e) {
-			}
-		}
-	
-		return read_board;
+	public String change_nickname(String nickname,String id){
+    	String result = "-5";
+    
+    	try {                                                                                                                                                                                 
+    		pstmt = con.prepareStatement("UPDATE user_info SET nickname = ? WHERE id  = ?");
+    		pstmt.setString(1, nickname);
+    		pstmt.setString(2, id);
+    		
+    		int i = pstmt.executeUpdate();
+   //=======================================================================
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    			if ( pstmt != null ) pstmt.close();
+    			if ( con != null ) con.close();
+    		}catch( Exception e ) {}
+    	}
+    	
+    	System.out.println("StoreNameChange 성공");
+    	return result;
 	}
 }
 

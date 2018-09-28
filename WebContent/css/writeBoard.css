@@ -41,13 +41,16 @@
 	border: 2px solid rgba(74, 140, 195, 0.4);
 }
 
-.location_section input{
+.location_section div{
 	padding: 0px 10px;
 	width: 95%;
 	height: 100%;
 	border: none;
 	outline-style: none;
 	background-color: transparent;
+	text-align : center;
+	line-height : 60px;
+	display : inline-block;
 }
 
 .location_section button{

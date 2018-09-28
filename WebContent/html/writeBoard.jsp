@@ -8,6 +8,10 @@
 %>
 <head>
 	<title></title>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1O3_xjyaGDGbrQ38g-i3kjUpCgjuWEWw&callback=initMap"
+  	type="text/javascript"></script>
+  
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/writeBoard.css">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -39,10 +43,11 @@
 		<div class="wrap">
 			<!-- 위치 부분 -->
 			<div class="location_section">
-				<input placeholder="위치 입력..."> </input>
+				<div>위치 입력...</div>
 				<button id="location_button" type="button" value="위치받아오기"> </button>
-				<input id="lat" type="hidden">
-                <input id="lon" type="hidden">
+				<input id="address" type="hidden" value="서울시">
+				<input id="lat" type="hidden" value="0.0">
+                <input id="lng" type="hidden" value="0.0">
 			</div>
 
 			<div class="content_section" id="text_box"> 
@@ -58,5 +63,36 @@
 			
 		</div>
 	</form>
+	
+	<input type="hidden" id="sendEvent" onclick="sendEvent()"> <!-- 지도에서 전송 누를시 발생하는 이벤트를 위한 button -->
 </body>
 </html>
+
+<script>
+	var openWin;
+
+	$(function(){
+		// 구글 Map 열기
+		$('.location_section button').click(function(){
+			openMap();
+		});
+	});
+	
+	function openMap()
+	{
+	    // window.name = "부모창 이름"; 
+	    window.name = "parentForm";
+	    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+	    openWin = window.open("writeMap.jsp",
+	            "childForm", "width=" + (window.innerWidth/2) + "px, height=" + (window.innerHeight/2) + "px, resizable = yes, scrollbars = no");    
+	}
+	
+	// Map에서 좌표 찍고, click줘서 발생시키는 이벤트
+	function sendEvent(){
+		var address = document.getElementById("address").value;
+		
+		document.querySelector(".location_section div").innerText = address; // 화면에 주소 보여주기
+		//alert("address : " + address + "\n, lat : " + lat + "\n, lng : " + lng );
+	}
+
+</script>
