@@ -129,7 +129,7 @@ public class FrontController
 	
 	private String write_comment_photo(JSONObject jobj) throws JSONException
 	{
-		return dao.write_comment_phto(jobj.getInt("num"), jobj.getString("name"));
+		return dao.write_comment_phto(jobj.getString("num"), jobj.getString("name"));
 	}
 	
 	private String read_myLocation(JSONObject jobj) throws JSONException
