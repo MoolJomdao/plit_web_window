@@ -1627,7 +1627,7 @@ public class DAO
     			{
     				jtmp.put("user_photo",path+"PlitImage/"+rs.getString(6));
     			}
-    			if(rs.getString(7).equals("0"))
+    			if(rs.getString(7).equals("No Photo"))
     			{
     				jtmp.put("comment_photo",rs.getString(7));
     			}
@@ -1683,7 +1683,7 @@ public class DAO
     	    
     	    	try {                                                                                                                                                                                 
 
-    	    		pstmt = conn.prepareStatement("INSERT INTO comment(board_num,comment_date,comment_content,comment_ID,comment_photo,comment_pw,comment_nickname,user_photo) VALUES (?,SYSDATETIME,?,?,0,?,?,?)");
+    	    		pstmt = conn.prepareStatement("INSERT INTO comment(board_num,comment_date,comment_content,comment_ID,comment_photo,comment_pw,comment_nickname,user_photo) VALUES (?,SYSDATETIME,?,?,'No Photo',?,?,?)");
     	    		pstmt.setInt(1, Integer.parseInt(board_num));
     	    		pstmt.setString(2, content);
     	    		pstmt.setString(3, user_name);
