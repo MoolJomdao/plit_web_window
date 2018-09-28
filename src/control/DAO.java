@@ -2054,12 +2054,7 @@ public class DAO
     	
     	System.out.println("DAO LOGIN COMPLETE");
     	return result;
-    
-    }
-	
-}N COMPLETE");
-    	return result;
-    
+
     }
 	
 }
