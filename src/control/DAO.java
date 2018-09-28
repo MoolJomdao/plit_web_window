@@ -50,6 +50,48 @@ public class DAO
     
     
     
+    public String write_comment_phto(String comment_num,String photo_name)
+    {
+    
+    	System.out.println("DAO PHOTO Strting");
+    	String result = "-5";
+    
+    	try {                                                                                                                                                                                 
+
+    		pstmt = conn.prepareStatement("UPDATE comment SET comment_photo = ? WHERE comment_num = ?");
+    		pstmt.setString(1, photo_name);
+    		pstmt.setInt(2, Integer.parseInt(comment_num));
+    		int i = pstmt.executeUpdate();
+    		
+    		result = i+"";
+    				
+    	
+
+   //=======================================================================
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    		}catch( Exception e ) {}	
+    		try{
+    			if ( pstmt != null ) pstmt.close();
+    		}catch( Exception e ) {}
+    		try{
+    			if ( conn != null ) conn.close();
+    		}catch( Exception e ) {}
+    	}
+ //=========================================================================   	
+    	
+    	System.out.println("DAO PHOTO COMPLETE");
+    	return result;
+    }
+    
+    
  
     public String read_myLocation(String id)
     {
@@ -151,7 +193,11 @@ public class DAO
     	    	} finally {
     	    		try{	  
     	    			if ( rs != null ) rs.close();
+    	    		}catch( Exception e ) {}	
+    	    		try{
     	    			if ( pstmt != null ) pstmt.close();
+    	    		}catch( Exception e ) {}
+    	    		try{
     	    			if ( conn != null ) conn.close();
     	    		}catch( Exception e ) {}
     	    	}
@@ -171,6 +217,7 @@ public class DAO
     	    		pstmt.setInt(1, comment_num);
     	    		
     	    		int i = pstmt.executeUpdate();
+    	    		
     	    		
     	    		pstmt = conn.prepareStatement("UPDATE board SET comment_cnt = comment_cnt - 1 WHERE board_num = ?");
     	    		pstmt.setInt(1,board_num);
@@ -825,7 +872,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,b.nickname FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
     		// LIMIT ?,10
     		pstmt.setDouble(1, lat);
     		pstmt.setDouble(2, lon);
@@ -852,7 +899,7 @@ public class DAO
     			{
     				jtmp.put("user_photo",path+"PlitImage/"+rs.getString(8));
     			}
-    			
+    			jtmp.put("nickname",rs.getString(9));
     			jrr.put(jtmp);
     			count++;
     			
@@ -1046,7 +1093,7 @@ public class DAO
     		rs.next();
     		
     		System.out.println("mypage json start");
-    		result.put("user_id",rs.getString(7));
+    		result.put("user_id",rs.getString(1));
     		result.put("date_birth",rs.getString(3));
     		result.put("date_member",rs.getString(4));
     		if(rs.getString(5).equals("No Photo"))
@@ -1058,6 +1105,7 @@ public class DAO
     			result.put("user_photo",path+"PlitImage/"+rs.getString(5));
 			}
     		result.put("massage",rs.getString(6));
+    		result.put("nickname",rs.getString(7));
     		result.put("latitude",rs.getDouble(8));
     		result.put("longitude",rs.getDouble(9));
     		System.out.println("mypage json end");
@@ -1095,7 +1143,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id AND a.id = ? ORDER BY a.date_board DESC LIMIT ?,10");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,a.category_num,a.comment_cnt,b.nickname FROM board a, user_info b WHERE a.id = b.id AND a.id = ? ORDER BY a.date_board DESC LIMIT ?,10");
     		// LIMIT ?,10
     		pstmt.setString(1, user_name);
     		pstmt.setInt(2, limit);
@@ -1124,6 +1172,7 @@ public class DAO
     			}
     			jtmp.put("category",rs.getInt(9));
     			jtmp.put("comment_cnt",rs.getInt(10));
+    			jtmp.put("nickname",rs.getString(11));
     			jrr.put(jtmp);
     			count++;
     			
@@ -1168,7 +1217,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,a.category_num,a.comment_cnt,b.nickname FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY b.id DESC");
     		// LIMIT ?,10
     		pstmt.setDouble(1, min_lat);
     		pstmt.setDouble(2, max_lat);
@@ -1199,6 +1248,7 @@ public class DAO
     			}  			
     			jtmp.put("category",rs.getInt(9));
     			jtmp.put("comment_cnt",rs.getInt(10));
+    			jtmp.put("nickname",rs.getString(7));
     			jrr.put(jtmp);
     			count++;
     			
@@ -1245,7 +1295,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,b.nickname,b.user_photo,a.category_num,a.comment_cnt FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC LIMIT ?,10");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_latitude,a.board_longitude,a.id,b.user_photo,a.category_num,a.comment_cnt,b.nickname FROM board a, user_info b WHERE a.id = b.id and a.board_latitude >= ? AND a.board_latitude <= ? AND a.board_longitude >= ? AND a.board_longitude <= ? ORDER BY a.date_board DESC LIMIT ?,10");
     		// LIMIT ?,10
     		pstmt.setDouble(1, min_lat);
     		pstmt.setDouble(2, max_lat);
@@ -1277,6 +1327,7 @@ public class DAO
     			}
     			jtmp.put("category",rs.getInt(9));
     			jtmp.put("comment_cnt",rs.getInt(10));
+    			jtmp.put("nickname",rs.getString(7));
     			jrr.put(jtmp);
     			count++;
     			
@@ -1340,7 +1391,7 @@ public class DAO
     			JSONObject jtmp = new JSONObject();
     			JSONArray tjrr = new JSONArray();
     			
-    			pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.nickanme,b.user_photo FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
+    			pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.id,b.user_photo,b.nickname FROM board a, user_info b WHERE a.id = b.id and a.board_latitude = ?  AND a.board_longitude = ? ORDER BY a.date_board DESC");
     			pstmt.setDouble(1, rs.getDouble(1));
     			pstmt.setDouble(2, rs.getDouble(2));
     			res = pstmt.executeQuery();
@@ -1353,6 +1404,7 @@ public class DAO
     				tjob.put("board_num",res.getInt(1));
     				tjob.put("content",res.getString(2));
     				tjob.put("id",res.getString(3));
+    				tjob.put("nickname",res.getString(5));
     				//tjob.put("user_photo",res.getString(4));
     				
         			if(res.getString(4).equals("No Photo"))
@@ -1385,6 +1437,7 @@ public class DAO
     			jtmp.put("board_longitude",rs.getDouble(2));
     			jtmp.put("board_count",rs.getInt(3));
     			jtmp.put("board_data", tjrr);
+    			
     			
     			jrr.put(jtmp);
     			count++;
@@ -1557,7 +1610,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num = ?");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo , a.comment_photo, a.comment_pw, a.comment_nickname, a.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num = ?");
     		pstmt.setInt(1, Integer.parseInt(board_num));
     		rs = pstmt.executeQuery();
     		
@@ -1580,7 +1633,17 @@ public class DAO
     			{
     				jtmp.put("user_photo",path+"PlitImage/"+rs.getString(6));
     			}
-    			
+    			if(rs.getString(7).equals("No Photo"))
+    			{
+    				jtmp.put("comment_photo",rs.getString(7));
+    			}
+    			else
+    			{
+    				jtmp.put("comment_photo",path+"PlitImage/"+rs.getString(7));
+    			}
+    			jtmp.put("comment_pw",rs.getString(8));
+    			jtmp.put("comment_nickname",rs.getString(9));
+    			jtmp.put("guest_photo",rs.getInt(10));
     			jrr.put(jtmp);
     			count++;
     			
@@ -1619,26 +1682,55 @@ public class DAO
     }
     
     
-    public String write_Comment(String board_num,String user_name,String content)
+    public String write_Comment(String board_num,String user_name,String content,String pw,String nickname, int guestPhoto)
     {
     	    	System.out.println("DAO Insert Strting");
     	    	String result = "-5";
+    	    	String user_nickname = nickname;
     	    
-    	    	try {                                                                                                                                                                                 
+    	    	try { 
+    	    		if(!user_name.equals("Guest"))
+    	    		{
+        	    		pstmt = conn.prepareStatement("SELECT nickname FROM user_info WHERE id = ?");
+        	    		pstmt.setString(1,user_name);
+        	    		
+        	    		
+        	    		rs = pstmt.executeQuery();
+        	    		
+        	    		if(rs.next())
+        	    		{
+        	    			user_nickname = rs.getString(1);
+        	    		}
+    	    		}
 
-    	    		pstmt = conn.prepareStatement("INSERT INTO comment(board_num,comment_date,comment_content,comment_ID) VALUES (?,SYSDATETIME,?,?)");
+    	    		pstmt = conn.prepareStatement("INSERT INTO comment(board_num,comment_date,comment_content,comment_ID,comment_photo,comment_pw,comment_nickname,user_photo) VALUES (?,SYSDATETIME,?,?,'No Photo',?,?,?)");
     	    		pstmt.setInt(1, Integer.parseInt(board_num));
     	    		pstmt.setString(2, content);
     	    		pstmt.setString(3, user_name);
+    	    		pstmt.setString(4, pw);
+    	    		pstmt.setString(5, user_nickname);
+    	    		pstmt.setInt(6, guestPhoto);
     	    		
     	    		int i = pstmt.executeUpdate();
     	    		
+    	    		pstmt = conn.prepareStatement("SELECT comment_num FROM comment WHERE board_num = ? ORDER BY comment_num DESC LIMIT 1");
+    	    		pstmt.setInt(1, Integer.parseInt(board_num));
+    	    		
+    	    		
+    	    		rs = pstmt.executeQuery();
+    	    		
+    	    		if(rs.next())
+    	    		{
+    	    			result = rs.getInt(1)+"";
+    	    		}   	    		
+    	    	   	    		
+    	        	    		
     	    		pstmt = conn.prepareStatement("UPDATE board SET comment_cnt = comment_cnt + 1 WHERE board_num = ?");
     	    		pstmt.setInt(1, Integer.parseInt(board_num));
     	    		
     	    		i = pstmt.executeUpdate();
     	    		
-    	    		result = i+"";
+    	    	
     	    				
     	    	
 
@@ -1769,6 +1861,7 @@ public class DAO
     				
     	
 
+    		
    //=======================================================================
     	} catch ( SQLException e ) {
     		System.out.println("Login 1");
@@ -1960,6 +2053,11 @@ public class DAO
  //=========================================================================   	
     	
     	System.out.println("DAO LOGIN COMPLETE");
+    	return result;
+    
+    }
+	
+}N COMPLETE");
     	return result;
     
     }
