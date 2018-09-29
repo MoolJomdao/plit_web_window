@@ -32,6 +32,7 @@
        });  
        
        settingEvent();
+       buttonEvent();
 
     });
 
@@ -150,20 +151,6 @@
                
           } );   
 
-       $(".button > button").eq(2).click(function(){
-    	   openMap( "html/map.jsp" );
-       }); 
-	   	/**************** 맵 띄우는 부분 ************************/
-	   	var openWin;
-	
-	   	function openMap( openFile )
-	   	{
-	   	    // window.name = "부모창 이름"; 
-	   	    window.name = "parentForm";
-	   	    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
-	   	    openWin = window.open(openFile,
-	   	            "childForm", "width=" + (window.innerWidth/2) + "px, height=" + (window.innerHeight/2) + "px, resizable = yes, scrollbars = no");    
-	   	}
     }
 
     // prompt창 데이터 여부 확인
@@ -204,6 +191,35 @@
            });
        }
     }
+
+    function buttonEvent()
+	{
+		var $buttons = $(".button > button");
+
+		$buttons.eq(0).click(function(){
+			$('#storeBoardButton').click();
+		}); 
+
+		$buttons.eq(1).click(function(){
+			$('#reviewPageButton').click();
+		}); 
+
+		$buttons.eq(2).click(function(){
+			openMap( "html/map.jsp" );
+		});   
+	}
+    
+   	/**************** 맵 띄우는 부분 ************************/
+   	var openWin;
+
+   	function openMap( openFile )
+   	{
+   	    // window.name = "부모창 이름"; 
+   	    window.name = "parentForm";
+   	    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+   	    openWin = window.open(openFile,
+   	            "childForm", "width=" + (window.innerWidth/2) + "px, height=" + (window.innerHeight/2) + "px, resizable = yes, scrollbars = no");    
+   	}
 
    	// Map에서 좌표 찍고, click줘서 발생시키는 이벤트
    	function sendEvent(){
@@ -272,5 +288,17 @@
       </div>
    </div>
 	<input type="hidden" id="sendEvent" onclick="sendEvent()"> <!-- 지도에서 전송 누를시 발생하는 이벤트를 위한 button -->
+	
+	<!-- storeBoard 누르면 id값 가지고 이동해야해서 form 태그 사용 -->
+	<form action='storeBoard.store' method='POST' accept-charset='utf-8'>
+		<input type='hidden' name='storeBoardId' value='<%= mypage.userId %>'>
+		<input id='storeBoardButton' type='submit' >
+	</form>
+	
+	<!-- reviewPage 누르면 id값 가지고 이동해야해서 form 태그 사용 -->
+	<form action='reviewPage.store' method='POST' accept-charset='utf-8'>
+		<input type='hidden' name='reviewPageId' value='<%= mypage.userId %>'>
+		<input id='reviewPageButton' type='submit' >
+	</form>
 </body>
 </html>

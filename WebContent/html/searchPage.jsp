@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/searchPage.css">
 	
 	<% 
 		request.setCharacterEncoding("utf-8");
@@ -126,9 +126,8 @@
 		%>
 		</div>
 	</div>
-	
 	<form action='searchPage.bo' accept-charset='utf-8' method='POST'>
-		<input id='searchStr' type='hidden' name='searchStr' value='1'>
+		<input id='searchStr' type='hidden' name='searchStr'>
 		<input id="searchBtn" type='submit' style='display:none;'>
 	</form>
 </body>
@@ -139,7 +138,7 @@
 		var inputs = document.getElementsByClassName("send");
 		$(inputs[i]).click();
 	}
-	
+
 	$(function(){
 		var onClick = false;
 		var $input = $(".navbar-right input");
@@ -153,6 +152,7 @@
 			}
 			else
 			{
+				var str = $input.val();
 				if( $input.val() != "" ){ // 검색어를 입력 했으면
 					$('#searchStr').val( $input.val() ); // input 태그에 검색할 단어 넣고
 					$('#searchBtn').click(); // searchPage.bo 호출
@@ -167,5 +167,4 @@
 			
 		})
 	})
-
 </script>

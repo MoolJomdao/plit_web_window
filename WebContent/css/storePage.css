@@ -123,10 +123,9 @@ button a, button a:hover, button a:focus, button a:visited{
 	cursor: pointer;
 }
 
-#setting_menu input{
-   display: none;
+#setting_menu > input{
+	display: none;
 }
-
 /**************************/
 
 @media (max-height: 600px) {
@@ -160,7 +159,6 @@ button a, button a:hover, button a:focus, button a:visited{
 		padding: 0px;
 	}
 }
-}
 
 /* 태블릿 */
 @media (max-width: 768px) {
@@ -180,3 +178,6 @@ button a, button a:hover, button a:focus, button a:visited{
 	}
 }
 
+input[type=submit]{
+	display:none;
+}

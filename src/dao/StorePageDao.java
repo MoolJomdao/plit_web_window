@@ -4,12 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
+import bean.Read_Board_List;
 import bean.Read_Mypage;
 import db.GpsToAddress;
 
@@ -154,6 +156,35 @@ public class StorePageDao {
 		return result;
 	}
 
+	public String get_background( String id ){
+		String backgroundName = null;
+		try {                                                                                                                                                                                 
+			pstmt = con.prepareStatement("SELECT user_photo FROM user_info WHERE id = ?");
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			if( rs.next() )
+			{
+				backgroundName = "PlitImage/" + rs.getString(1);
+			}
+	//=======================================================================	
+		} catch ( SQLException e ) {
+			System.out.println("Login 1");
+			e.printStackTrace();
+		} catch ( Exception e ) {
+			System.out.println("Login 2");
+			e.printStackTrace();
+		} finally {
+			try{	  
+				if ( rs != null ) rs.close();
+				if ( pstmt != null ) pstmt.close();
+				if ( con != null ) con.close();
+			}catch( Exception e ) {}
+		}
+		return backgroundName;
+	}
+	
     public Read_Mypage read_myPage(String user_name )
     {
     	Read_Mypage mypage = new Read_Mypage();
@@ -206,7 +237,71 @@ public class StorePageDao {
     	
 		return mypage;
     }
+    public ArrayList<Read_Board_List> read_storeBoard_List( String id ) {
+		ArrayList<Read_Board_List> arr = new ArrayList<>();
+		Read_Board_List rbl = null;
+		ResultSet photoResult = null;
+
+		try {
+			String str = "SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo, b.nickname "
+					+ "FROM board a, user_info b " 
+					+ "WHERE a.id = b.id AND a.id=? " 
+					+ "ORDER BY a.date_board DESC";
+			pstmt = con.prepareStatement( str );
+			pstmt.setString(1, id);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				rbl = new Read_Board_List();
+
+				rbl.setBoardNum(rs.getInt(1));
+				rbl.setContent(rs.getString(2));
+				rbl.setBoardLatitude(rs.getDouble(3));
+				rbl.setBoardLongitude(rs.getDouble(4));
+				rbl.setUserId(rs.getString(5));
+				rbl.storeName = rs.getString(7);
+
+				if (rs.getString(6).equals("No Photo")) {
+					rbl.setUserPhoto(rs.getString(6));
+				} else {
+					rbl.setUserPhoto(path + "PlitImage/" + rs.getString(6));
+				}
+
+				pstmt = con.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
+				pstmt.setInt(1, rbl.getBoardNum());
+				photoResult = pstmt.executeQuery();
+				
+				if( photoResult.next() )
+					rbl.setBoardPhoto(path + "PlitImage/" + photoResult.getString(2));
+				
+				arr.add(rbl);
+			}
+
+			// =======================================================================
+		} catch (SQLException e) {
+			System.out.println("RBL SQL error");
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("RBL Exception");
+			e.printStackTrace();
+			return null;
+		} finally {
+			
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+				if (photoResult != null)
+					photoResult.close();
+			} 
+			catch (Exception e) {
+			}
+		}
+		return arr;
+	}
 }
-
-
-

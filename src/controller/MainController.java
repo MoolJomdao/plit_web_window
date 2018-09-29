@@ -13,6 +13,7 @@ import action.BoardListAction;
 import action.BoardWriteAction;
 import action.JoinUserAction;
 import action.LoginUserAction;
+import action.SearchListAction;
 import action.StorePageAction;
 
 public class MainController extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
@@ -34,7 +35,12 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 			{
 				action = new BoardListAction();
 				forward = action.execute(request, response);
-			}		
+			}			
+			else if( command.equals("/searchPage.bo") )
+			{
+				action = new SearchListAction();
+				forward = action.execute(request, response);
+			}	
 			else if( command.equals("/storePage.bo") )
 			{
 				action = new StorePageAction();

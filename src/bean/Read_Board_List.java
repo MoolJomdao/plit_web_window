@@ -9,6 +9,7 @@ public class Read_Board_List {
 	private double boardLatitude;
 	private double boardLongitude;
 	private String userId;
+	public String storeName;
 	private String userPhoto;
 	private String boardPhoto;
 	

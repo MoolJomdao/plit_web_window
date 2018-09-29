@@ -1,0 +1,120 @@
+﻿body{
+	margin: 0;
+	background-color: transparent;
+}
+
+html{
+	background: no-repeat center center fixed;
+	background-size: cover;
+}
+
+#frontground{
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	background-color: rgba(0, 0, 0, 0.4);
+	background-attachment: fixed;
+}
+.navbar-inverse{
+	background-color: transparent;
+	border: none;
+}
+
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a{
+	color: white;
+}
+
+#wrapper{
+	width: 95%;
+	margin: 20px auto;
+}
+
+#columns{
+	column-count: 2;
+}
+
+.card{
+	display: inline-block;
+	width: 90%;
+	background: #fff;
+	box-shadow: 0px 1px 1px #ccc;
+	padding: 15px;
+	margin: 10px;
+}
+
+.card img{
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 15px;
+	margin-bottom: 5px;
+}
+
+.card p{
+	font-family: "맑은 고딕";
+	color: #333;
+	margin: 0;
+	padding-bottom: 10px;
+}
+
+.profile{
+	width: 30px;
+	height: 30px;
+	float: left;
+}
+.profile img{
+	padding: 0px;
+	border-radius: 100px;
+}
+
+.card h5{
+	display: inline-block;
+	padding-left: 10px;
+}
+
+footer > img{
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+	width: 34px;
+	cursor: pointer;
+	z-index: 100;
+}
+/******************************/
+
+@media(min-width: 960px){
+	#columns{
+		column-count: 3;
+	}
+}
+
+@media(min-width: 1000px){
+	#columns{
+		column-count: 4;
+	}
+}
+
+@media(min-width: 1800px){
+	#columns{
+		column-count: 5;
+	}
+}
+@media(max-width: 768px){
+	.navbar-right{
+   		float: left !important;
+    	margin-right: -15px;
+	}
+
+	.navbar-right li{
+		display: inline-block;
+		right: 0;
+	}
+	.arrow:first-child{
+		left: 3%;
+	}
+
+	.arrow:nth-child(3){
+		right: 3%;
+	}
+}

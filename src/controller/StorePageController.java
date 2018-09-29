@@ -19,8 +19,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import action.Action;
 import action.ActionForward;
-import action.StorePageAction;
-import dao.Dao;
+import action.StoreBoardAction;
 import dao.StorePageDao;
 
 public class StorePageController extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
@@ -40,7 +39,19 @@ public class StorePageController extends javax.servlet.http.HttpServlet implemen
 			HttpSession session = request.getSession();
 			String id = (String)session.getAttribute("id");
 			
-			if( command.equals("/storeNameChange.store") )
+			if( command.equals("/storeBoard.store") )
+			{
+				action = new StoreBoardAction();
+				forward = action.execute(request, response);
+			}
+			else if( command.equals("/reviewPage.store") )
+			{
+				String storeName = (String)request.getParameter("storeName");
+				StorePageDao dao = new StorePageDao();
+				response.getWriter().println( dao.change_nickname( storeName, id) );
+				
+			}
+			else if( command.equals("/storeNameChange.store") )
 			{
 				String storeName = (String)request.getParameter("storeName");
 				StorePageDao dao = new StorePageDao();

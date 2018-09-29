@@ -114,29 +114,43 @@ public class Dao {
 		return result;
 	}
 
-	public ArrayList<Search_Board> search_board(String tag) // stop
+	public ArrayList<Read_Board_List> search_board(String tag) // stop
 	{
-		ArrayList<Search_Board> arr = new ArrayList<>();
-		Search_Board sb = null;
+		ArrayList<Read_Board_List> arr = new ArrayList<>();
+		Read_Board_List sb = null;
+		ResultSet photoResult = null;
 
 		try {
-			String board_tag = "%#" + tag + "#%";
+			String board_tag = "%" + tag + "%";
 
-			pstmt = conn.prepareStatement(
-					"SELECT a.board_num, a.board_content, a.date_board, a.good, a.board_tag ,a.board_latitude,a.board_longitude,a.id, b.user_photo FROM board a, user_info b WHERE a.id = b.id AND a.board_tag LIKE ? ORDER BY a.date_board DESC");
-			// LIMIT ?,10
-			pstmt.setString(1, board_tag);
-			rs = pstmt.executeQuery();
+			pstmt = conn.prepareStatement("SELECT "
+					+ "a.board_num, " 		// 1
+					+ "a.board_content, "	// 2
+					+ "a.date_board, "		// 3
+					+ "a.good,"				// 4
+					+ "a.board_latitude,"	// 5
+					+ "a.board_longitude,"	// 6
+					+ "a.id,"				// 7
+					+ "b.user_photo, "		// 8
+					+ "a.category_num,"		// 9
+					+ "a.comment_cnt, "		// 10
+					+ "b.nickname "			// 11
+					+ "FROM board a, user_info b "
+					+ "WHERE a.id = b.id AND (a.board_tag LIKE ? OR a.board_content LIKE ?) "
+					+ "ORDER BY a.date_board DESC");
+            // LIMIT ?,10
+            pstmt.setString(1, board_tag);
+            pstmt.setString(2, board_tag);
+            rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				sb = new Search_Board();
+				sb = new Read_Board_List();
 				sb.setBoardNum(rs.getInt(1));
 				sb.setContent(rs.getString(2));
-				sb.setDateBoard(rs.getString(3));
-				sb.setGood(rs.getInt(4));
 				sb.setBoardLatitude(rs.getDouble(5));
 				sb.setBoardLongitude(rs.getDouble(6));
 				sb.setUserId(rs.getString(7));
+				sb.storeName = rs.getString(11);
 
 				if (rs.getString(8).equals("No Photo")) {
 					sb.setUserPhoto(rs.getString(8));
@@ -144,6 +158,13 @@ public class Dao {
 					sb.setUserPhoto(path + "PlitImage/" + rs.getString(8));
 				}
 
+				pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
+				pstmt.setInt(1, sb.getBoardNum());
+				photoResult = pstmt.executeQuery();
+				
+				if( photoResult.next() )
+					sb.setBoardPhoto(path + "PlitImage/" + photoResult.getString(2));
+				
 				arr.add(sb);
 			}
 
@@ -160,14 +181,8 @@ public class Dao {
 			try {
 				if (rs != null)
 					rs.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (pstmt != null)
 					pstmt.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
@@ -1045,7 +1060,7 @@ public class Dao {
 		ResultSet photoResult = null;
 
 		try {
-			String str = "SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo "
+			String str = "SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo,b.nickname "
 					+ "FROM board a, user_info b " 
 					+ "WHERE a.id = b.id " 
 					+ "ORDER BY a.date_board DESC";
@@ -1061,6 +1076,7 @@ public class Dao {
 				rbl.setBoardLatitude(rs.getDouble(3));
 				rbl.setBoardLongitude(rs.getDouble(4));
 				rbl.setUserId(rs.getString(5));
+				rbl.storeName = rs.getString(7);
 
 				if (rs.getString(6).equals("No Photo")) {
 					rbl.setUserPhoto(rs.getString(6));
