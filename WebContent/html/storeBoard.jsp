@@ -7,6 +7,7 @@
 <head>
 	<title></title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="css/storeSubPage.css">
@@ -26,8 +27,8 @@
 	ArrayList<Read_Board_List> arr = new ArrayList<Read_Board_List>();
 	arr = ( ArrayList<Read_Board_List> )request.getAttribute("storeBoards");
 	String background = (String)request.getAttribute("background");
-	String storeName = arr.get(0).storeName;
-	String pageId = arr.get(0).getUserId();
+	String storeName = (String)request.getAttribute("storeName");
+	String pageId = (String)request.getAttribute("boardId");
 	
 %>
 </head>
@@ -41,7 +42,7 @@
 		      	<a class="navbar-brand" href="#"> store board </a>
 		    </div>
 		    <ul class="nav navbar-nav navbar-right">
-		      <li><a href="#"> <%= arr.get(0).storeName %> </a></li>
+		      <li><a href="#"> <%= storeName %> </a></li>
 		    </ul>
 		  </div>
 		</nav>
@@ -57,7 +58,7 @@
 				userPhoto = ( ( !userPhoto.equals("No Photo") ) ? userPhoto : "./icon/user.png" ); // 있으면 , userPhoto, 없으면 기본 user.png
 				
 				String content = arr.get(i).getContent().replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
-				
+
 				String boardPhoto = arr.get(i).getBoardPhoto(); // 게시글 작성 글
 				
 				int boardNum =  arr.get(i).getBoardNum();
@@ -75,6 +76,17 @@
 		%>
 			<div class="card">
 		<% 
+				if( id.equals(pageId) )
+				{
+		%>
+				<img src="icon/cancel2.png" class="del" onclick='boardDel(<%= boardNum %>)'>
+				<form action="modifyBoard.store" class="modify" method='POST'>
+					<input type='hidden' name='boardNum' value='<%= boardNum %>'>
+					<input type="submit" value=""> 
+				</form>
+		<% 
+				}
+		
 				if( boardPhoto != null )
 				{
 		%>
@@ -84,14 +96,6 @@
 		%>
 				<p> <%= content %> </p> <!-- 내용 -->
 				<h6> <%= address %> </h6> <!-- 주소 -->
-				<!-- <div> -->
-					<!-- 사용자 프로필 사진 -->
-					<!-- <div class="profile"> -->
-					<!-- <img src=<%= //userPhoto %>> -->
-					<!-- </div> -->
-					<!-- 사용자 이름 -->
-					<!-- <h5> <%= //arr.get(i).storeName %> </h5> -->
-				<!-- </div>-->
 				
 			</div>
 		<%
@@ -124,4 +128,31 @@
 	function backButtonClick( id ){
 		$("#send").click();
 	}
+	
+	function boardDel( boardNum ){
+	      index = $(this).index();
+
+	      bootbox.confirm("해당 게시글을 삭제 하시겠습니까?", function( result ){ 
+		    	if( result )
+		    	{
+			         // 받아온 게시글 arraylist에서 index값으로 해당 게시글 번호 찾기
+			         $.ajax({
+			               type : "POST", 
+			               url : "deleteBoard.bo", // url을 서버로 보내주면 지정 서블릿이 실행
+			               data : { "boardNum": boardNum }, // 서버에서 사용할 메소드를 type 에다가 넣어준다
+			               dataType : "json",
+			               
+			               success : function( data )
+			               {
+			                  window.location.reload( true );
+			               },
+			               
+			               error : function()
+			               {
+			                   alert("변경 실패");
+			               }                
+			           });
+		    	}
+	      });
+	   }
 </script>

@@ -114,3 +114,13 @@
 		padding-top: 150px;
 	}
 }
+
+.photos{
+	width : 200px;
+	height : 100%;
+	margin-left : 10px;
+	background-size : 100%;
+	background-repeat : no-repeat;
+	background-position : center center;
+	display : inline-block;
+}

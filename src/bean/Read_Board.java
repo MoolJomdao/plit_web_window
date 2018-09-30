@@ -1,6 +1,8 @@
 package bean;
 
-public class Read_Board_List {
+import java.util.ArrayList;
+
+public class Read_Board {
 	
 	private int boardNum;
 	private String content;
@@ -9,7 +11,7 @@ public class Read_Board_List {
 	private String userId;
 	public String storeName;
 	private String userPhoto;
-	private String boardPhoto;
+	public ArrayList<String> photos = new ArrayList<>();
 	
 	public int getBoardNum() {
 		return boardNum;
@@ -47,15 +49,4 @@ public class Read_Board_List {
 	public void setUserPhoto(String userPhoto) {
 		this.userPhoto = userPhoto;
 	}
-	public String getBoardPhoto() {
-		return boardPhoto;
-	}
-	public void setBoardPhoto(String boardPhoto) {
-		this.boardPhoto = boardPhoto;
-	}
-	
-	
-	
-	
-
 }

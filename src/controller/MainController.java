@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,11 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import action.Action;
 import action.ActionForward;
 import action.BoardListAction;
+import action.BoardModifyAction;
 import action.BoardWriteAction;
 import action.JoinUserAction;
 import action.LoginUserAction;
 import action.SearchListAction;
 import action.StorePageAction;
+import dao.Dao;
 
 public class MainController extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 	
@@ -51,6 +54,11 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 				action = new BoardWriteAction();
 				forward = action.execute(request, response);
 			}
+			else if( command.equals("/modifyBoard.bo") )
+			{
+				action = new BoardModifyAction();
+				forward = action.execute(request, response);
+			}
 			else if( command.equals("/SignIn.me") )
 			{
 				forward = new ActionForward();
@@ -73,7 +81,20 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 				action = new JoinUserAction();
 				forward = action.execute(request, response);
 			}
-			
+			else if( command.equals("/getBoardPhotos.bo") )
+			{
+				int boardNum = Integer.parseInt(request.getParameter("boardNum"));
+				Dao dao = new Dao();
+				response.getWriter().println( dao.get_board_photos( boardNum ) );
+			}
+			else if( command.equals("/deleteBoard.bo") )
+			{
+				ServletContext context = request.getServletContext();
+				String dirPath = context.getRealPath("\\"); 
+				int boardNum = Integer.parseInt(request.getParameter("boardNum"));
+				Dao dao = new Dao();
+				response.getWriter().println( dao.delete_board( boardNum, dirPath ) );
+			}
 			/*********************************************************************/
 			
 			if(forward != null)

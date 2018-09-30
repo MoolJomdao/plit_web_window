@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bean.Load_Locate;
+import bean.Read_Board;
 import bean.Read_Board_Info;
 import bean.Read_Board_List;
 import bean.Read_Board_Location;
@@ -23,7 +24,6 @@ import bean.Read_Comment;
 import bean.Read_Friends;
 import bean.Read_Myboard;
 import bean.Read_Mypage;
-import bean.Search_Board;
 import bean.User_Info;
 
 public class Dao {
@@ -38,7 +38,7 @@ public class Dao {
 	//String path2 = "/var/lib/tomcat7/webapps/ROOT";
 
 	String path = "";
-	String path2 = "./";
+	String path2 = "";
 
 	public Dao()
 
@@ -394,8 +394,8 @@ public class Dao {
 		return result;
 	}
 
-	public String delete_board(int board_num) {
-		String r = "-3";
+	public String delete_board(int board_num, String contextPath) {
+		String r = "-1";
 		try {
 
 			pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?");
@@ -403,32 +403,42 @@ public class Dao {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				delete_board_photo(rs.getString(2));
-			}
+				
+				File file = new File(contextPath + "PlitImage/" + rs.getString(2));
 
+				if (file.exists()) 
+				{
+					file.delete();
+				} 
+				else 
+				{
+					System.out.println( contextPath + "PlitImage/" + rs.getString(2) + "파일이 존재하지 않습니다.");
+				}
+
+			}
+			// board_num 과 관련된 모든 사진 삭제
+			pstmt = conn.prepareStatement("DELETE FROM board_photo WHERE board_num = ?");
+			pstmt.setInt(1, board_num);
+			r = pstmt.executeUpdate() + "";
+			
+			// board_num에 맞는 board 삭제
 			pstmt = conn.prepareStatement("DELETE FROM board WHERE board_num = ?");
 			pstmt.setInt(1, board_num);
 			r = pstmt.executeUpdate() + "";
 
 			// =======================================================================
 		} catch (SQLException e) {
-			System.out.println("Login 1");
+			System.out.println("delete_board failed");
 			e.printStackTrace();
 		} catch (Exception e) {
-			System.out.println("Login 2");
+			System.out.println("delete_board failed");
 			e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null)
 					rs.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (pstmt != null)
 					pstmt.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
@@ -491,13 +501,12 @@ public class Dao {
 		return s;
 	}
 
-	public String delete_board_photo(String photo_name) {
+	public String delete_board_photo(String photo_name, String contextPath) {
 		String r = "-5";
 		try {
 
 			boolean isdel = false;
-
-			File file = new File(path2 + "/PlitImage/" + photo_name);
+			File file = new File(contextPath + "PlitImage/" + photo_name);
 
 			if (file.exists()) {
 				if (file.delete()) {
@@ -506,7 +515,7 @@ public class Dao {
 					isdel = false;
 				}
 			} else {
-				System.out.println("������ �������� �ʽ��ϴ�.");
+				System.out.println( contextPath + "PlitImage/" + photo_name + "파일이 존재하지 않습니다.");
 			}
 
 			if (isdel) {
@@ -526,16 +535,8 @@ public class Dao {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (rs != null)
-					rs.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (pstmt != null)
 					pstmt.close();
-			} catch (Exception e) {
-			}
-			try {
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
@@ -545,20 +546,48 @@ public class Dao {
 		return r;
 	}
 
-	public String change_board(int board_num, String Content, String tag, double longitude, double latitude) {
-		String r = "-3";
+
+	public int change_board(int board_num, String Content, String tag, double longitude, double latitude, int category, String contextPath, boolean delAll) {
+		int r = -1;
 		try {
 
 			pstmt = conn.prepareStatement(
-					"UPDATE board SET board_content = ?, board_tag = ?, date_board = SYSDATETIME, board_longitude = ?, board_latitude = ? WHERE board_num = ?");
+					"UPDATE board SET board_content = ?, board_tag = ?, date_board = SYSDATETIME, board_longitude = ?, board_latitude = ?, category_num = ? WHERE board_num = ?");
 			pstmt.setString(1, Content);
 			pstmt.setString(2, tag);
 			pstmt.setDouble(3, longitude);
 			pstmt.setDouble(4, latitude);
-			pstmt.setInt(5, board_num);
+			pstmt.setInt(5, category);
+			pstmt.setInt(6, board_num);
 
-			r = pstmt.executeUpdate() + "";
+			r = pstmt.executeUpdate();
+			
+			if( delAll ) // 만약 사용자가 사진을 다 삭제하고 새로 업로드했다면
+			{
+				pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?");
+				pstmt.setInt(1, board_num);
+				rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					File file = new File(contextPath + "PlitImage/" + rs.getString(2));
 
+					if (file.exists()) 
+					{
+						file.delete();
+					} 
+					else 
+					{
+						System.out.println( contextPath + "PlitImage/" + rs.getString(2) + "파일이 존재하지 않습니다.");
+					}
+				}
+				
+				// board_num 과 관련된 모든 사진 삭제
+				pstmt = conn.prepareStatement("DELETE FROM board_photo WHERE board_num = ?");
+				pstmt.setInt(1, board_num);
+				r = pstmt.executeUpdate();
+			}
+
+			
 			// =======================================================================
 		} catch (SQLException e) {
 			System.out.println("Login 1");
@@ -584,10 +613,10 @@ public class Dao {
 			}
 		}
 		// =========================================================================
-
+		
+		r = 1;
 		return r;
 	}
-
 	public ArrayList<Load_Locate> load_locate(String id) {
 		
 		ArrayList<Load_Locate> arr = new ArrayList<Load_Locate>();
@@ -1121,9 +1150,107 @@ public class Dao {
 		}
 
 		return arr;
-		
+	}
+	public Read_Board read_board( int boardNum ) {
+		Read_Board board = new Read_Board();
+		ResultSet photoResult = null;
+
+		try {
+			String str = "SELECT a.board_num, a.board_content, a.board_latitude,a.board_longitude,a.id,b.user_photo,b.nickname "
+					+ "FROM board a, user_info b " 
+					+ "WHERE a.id = b.id AND a.board_num=?";
+			pstmt = conn.prepareStatement( str );
+			pstmt.setInt(1, boardNum);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				board.setBoardNum(rs.getInt(1));
+				board.setContent(rs.getString(2));
+				board.setBoardLatitude(rs.getDouble(3));
+				board.setBoardLongitude(rs.getDouble(4));
+				board.setUserId(rs.getString(5));
+				board.storeName = rs.getString(7);
+
+				if (rs.getString(6).equals("No Photo")) {
+					board.setUserPhoto(rs.getString(6));
+				} else {
+					board.setUserPhoto(path + "PlitImage/" + rs.getString(6));
+				}
+
+				pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
+				pstmt.setInt(1, board.getBoardNum());
+				photoResult = pstmt.executeQuery();
+				
+				while( photoResult.next() )
+				{
+					board.photos.add( path + "PlitImage/" + photoResult.getString(2) );
+				}
+			}
+
+			// =======================================================================
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+				if (photoResult != null)
+					photoResult.close();
+			} 
+			catch (Exception e) {
+			}
+		}
+
+		return board;
 	}
 
+	public JSONArray get_board_photos( int boardNum ) {
+		JSONArray jrr = new JSONArray();
+
+		try {
+			pstmt = conn.prepareStatement("SELECT photo FROM board_photo WHERE board_num = ?;");
+			pstmt.setInt(1, boardNum);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				
+				jrr.put("PlitImage/" + rs.getString(1));
+			}
+
+			// =======================================================================
+		} catch (SQLException e) {
+			System.out.println("RBL SQL error");
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("RBL Exception");
+			e.printStackTrace();
+			return null;
+		} finally {
+			
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} 
+			catch (Exception e) {
+			}
+		}
+
+		return jrr;
+		
+	}
 	/*public Read_Board_List read_board_List(double min_lat, double max_lat, double min_lon, double max_lon) {
 		Read_Board_List rbl = new Read_Board_List();
 
@@ -1637,7 +1764,7 @@ public class Dao {
 	public int write_board_phto(String board_num, ArrayList<String> photo_names) {
 
 		System.out.println("DAO PHOTO Strting");
-		int result = -5;
+		int result = -1;
 		int j;
 		
 		try {
@@ -1861,4 +1988,40 @@ public class Dao {
 
 	}
 
+	public String get_nickname(String id) {
+
+		System.out.println("DAO Login Strting");
+		String result = id;
+
+		try {
+
+			pstmt = conn.prepareStatement("select nickname from user_info where id = ?");
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				result = rs.getString(1);
+			} else {
+				result = id;
+			}
+
+			// =======================================================================
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+			}
+		}
+		return result;
+
+	}
 }

@@ -20,6 +20,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import action.Action;
 import action.ActionForward;
 import action.StoreBoardAction;
+import dao.Dao;
 import dao.StorePageDao;
 
 public class StorePageController extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
@@ -71,6 +72,15 @@ public class StorePageController extends javax.servlet.http.HttpServlet implemen
 				double lng = Double.parseDouble( request.getParameter("lng") );
 				StorePageDao dao = new StorePageDao();
 				response.getWriter().println( dao.change_myLocation( lat, lng, id) );
+			}			
+			else if( command.equals("/modifyBoard.store") ) // 수정페이지 접속
+			{
+				int boardNum = Integer.parseInt( request.getParameter("boardNum") );
+				Dao dao = new Dao();
+				request.setAttribute("board", dao.read_board(boardNum) );
+				forward = new ActionForward();
+				forward.setRedirect(false);
+				forward.setPath("html/modifyBoard.jsp");
 			}
 			else if( command.equals("/storeBackgroundChange.store") )
 			{
