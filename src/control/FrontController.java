@@ -115,6 +115,11 @@ public class FrontController
 			break;
 		case "comment_num":
 			result.put("result", write_comment_photo(jobj));
+			break;
+		case "read_myPage_comment":
+			result.put("result", read_myPage_comment(jobj.getJSONObject("read_myPage_comment_data")));
+			break;
+		
 			
 		}
 		
@@ -123,6 +128,12 @@ public class FrontController
 		result.put(code);*/
 		
 		return result;
+	}
+	
+	private String read_myPage_comment(JSONObject jobj) throws JSONException
+	{
+		
+		return dao.read_comment(jobj.getString("id"));
 	}
 	
 	
