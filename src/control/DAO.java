@@ -49,6 +49,86 @@ public class DAO
     
     
     
+    public String read_myPage_comment(String id)
+    {
+    	JSONObject result = new JSONObject();
+    	int count = 0;
+    	
+    	
+    	try {                                                                                                                                                                                 
+
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo , a.comment_photo, a.comment_pw, a.comment_nickname, a.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num IN (SELECT board_num FROM board WHERE id = ?)");
+    		pstmt.setString(1,id);
+    		rs = pstmt.executeQuery();
+    		
+    		JSONArray jrr = new JSONArray();
+    	
+    		while(rs.next())
+    		{
+    			JSONObject jtmp = new JSONObject();
+    			
+    			jtmp.put("board_num",rs.getInt(1));
+    			jtmp.put("comment_num",rs.getInt(2));
+    			jtmp.put("comment_date",rs.getString(3));
+    			jtmp.put("comment_content",rs.getString(4));
+    			jtmp.put("comment_id",rs.getString(5));
+    			if(rs.getString(6).equals("No Photo"))
+    			{
+    				jtmp.put("user_photo",rs.getString(6));
+    			}
+    			else
+    			{
+    				jtmp.put("user_photo",path+"PlitImage/"+rs.getString(6));
+    			}
+    			if(rs.getString(7).equals("No Photo"))
+    			{
+    				jtmp.put("comment_photo",rs.getString(7));
+    			}
+    			else
+    			{
+    				jtmp.put("comment_photo",path+"PlitImage/"+rs.getString(7));
+    			}
+    			jtmp.put("comment_pw",rs.getString(8));
+    			jtmp.put("comment_nickname",rs.getString(9));
+    			jtmp.put("guest_photo",rs.getInt(10));
+    			jrr.put(jtmp);
+    			count++;
+    			
+    		}
+    		
+    		result.put("read_comment_data", jrr);
+
+   //=======================================================================
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    		}catch( Exception e ) {}	
+    		try{
+    			if ( pstmt != null ) pstmt.close();
+    		}catch( Exception e ) {}
+    		try{
+    			if ( conn != null ) conn.close();
+    		}catch( Exception e ) {}
+    	}
+    	
+    	
+    	try {
+			result.put("com_count", count);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return result.toString();
+    }
+
+    
     
     public String write_comment_phto(String comment_num,String photo_name)
     {
