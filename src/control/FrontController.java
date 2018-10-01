@@ -133,7 +133,7 @@ public class FrontController
 	private String read_myPage_comment(JSONObject jobj) throws JSONException
 	{
 		
-		return dao.read_comment(jobj.getString("id"));
+		return dao.read_myPage_comment(jobj.getString("id"));
 	}
 	
 	
