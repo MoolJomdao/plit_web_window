@@ -26,7 +26,7 @@
    padding-right: 20px;
 }
 
-.navbar-right input{
+.navbar-right li > input{
    width: 0px;
    height: 23px;
    margin-top: 15px;
@@ -37,6 +37,11 @@
    background-color: rgba(74, 140, 195, 0.1);
    color: black;
    transition: all 2s; 
+}
+
+.navbar-right li > label{
+   color: #4a8cc3;
+   visibility: hidden;
 }
 #wrapper{
    width: 95%;
@@ -200,6 +205,27 @@
    }
 
 }
-input[type=submit]{
-	display : none;
+
+.bottom{
+   position: relative;
+   width: 100%;
+   height: 30px;
+}
+
+.bottom form{
+   width: 20px;
+   height: 20px;
+   position: absolute;
+   top: 10px;
+   right: 0px;
+}
+.bottom form input[type=submit]{
+   background-image: url("../icon/comment1.png");
+   background-size: 100%;
+   background-color: transparent;
+   width: 20px;
+   height: 20px;
+   outline-style: none;
+   border:none;
+   padding: 0px;
 }

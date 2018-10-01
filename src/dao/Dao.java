@@ -15,16 +15,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import bean.Comment;
 import bean.Load_Locate;
 import bean.Read_Board;
 import bean.Read_Board_Info;
 import bean.Read_Board_List;
 import bean.Read_Board_Location;
-import bean.Read_Comment;
 import bean.Read_Friends;
 import bean.Read_Myboard;
 import bean.Read_Mypage;
 import bean.User_Info;
+import db.GpsToAddress;
 
 public class Dao {
 
@@ -69,9 +70,9 @@ public class Dao {
 
 	}
 
-	public String delete_Comment(int board_num, int comment_num) {
+	public int delete_comment(int board_num, int comment_num) {
 		System.out.println("DAO Insert Strting");
-		String result = "-5";
+		int result = -1;
 
 		try {
 
@@ -85,7 +86,7 @@ public class Dao {
 
 			i = pstmt.executeUpdate();
 
-			result = i + "";
+			result = i;
 
 			// =======================================================================
 		} catch (SQLException e) {
@@ -167,6 +168,110 @@ public class Dao {
 				
 				arr.add(sb);
 			}
+
+			// =======================================================================
+		} catch (SQLException e) {
+			System.out.println("Search_Board SQL error");
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("Search_Board Exception");
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+			}
+		}
+
+		return arr;
+	}
+
+	public ArrayList<Read_Board_List> search_board_from_location(String tag) // stop
+	{
+		ArrayList<Read_Board_List> arr = new ArrayList<>();
+		Read_Board_List sb = null;
+		ResultSet photoResult = null;
+		int boardNum;
+		double lat, lng;
+		boolean isAddress;
+		ArrayList<Integer> boardNums = new ArrayList<Integer>();
+		try {
+				
+			pstmt = conn.prepareStatement("SELECT board_num, board_latitude, board_longitude FROM board");
+            rs = pstmt.executeQuery();
+            
+            while( rs.next() )
+            {
+    			boardNum = rs.getInt(1);
+    			lat = rs.getDouble(2);
+    			lng = rs.getDouble(3);
+
+    			if( lat != 0.0 && lng != 0.0 )
+    			{
+    				GpsToAddress GTA = new GpsToAddress( lat, lng );
+    				String address = GTA.getAddress();
+    				isAddress = address.contains(tag);
+    				
+    				if( isAddress ) // 찾고자하는 주소가 포함되어 있다면
+    				{
+    					boardNums.add( boardNum );
+    				}
+    			}
+            }
+			
+            for( int i=0; i<boardNums.size(); i++)
+            {
+				pstmt = conn.prepareStatement("SELECT "
+						+ "a.board_num, " 		// 1
+						+ "a.board_content, "	// 2
+						+ "a.date_board, "		// 3
+						+ "a.good,"				// 4
+						+ "a.board_latitude,"	// 5
+						+ "a.board_longitude,"	// 6
+						+ "a.id,"				// 7
+						+ "b.user_photo, "		// 8
+						+ "a.category_num,"		// 9
+						+ "a.comment_cnt, "		// 10
+						+ "b.nickname "			// 11
+						+ "FROM board a, user_info b "
+						+ "WHERE a.id = b.id AND a.board_num = ? "
+						+ "ORDER BY a.date_board DESC");
+	            // LIMIT ?,10
+	            pstmt.setInt(1, boardNums.get(i));
+	            rs = pstmt.executeQuery();
+	
+				if (rs.next()) {
+					sb = new Read_Board_List();
+					sb.setBoardNum(rs.getInt(1));
+					sb.setContent(rs.getString(2));
+					sb.setBoardLatitude(rs.getDouble(5));
+					sb.setBoardLongitude(rs.getDouble(6));
+					sb.setUserId(rs.getString(7));
+					sb.storeName = rs.getString(11);
+	
+					if (rs.getString(8).equals("No Photo")) {
+						sb.setUserPhoto(rs.getString(8));
+					} else {
+						sb.setUserPhoto(path + "PlitImage/" + rs.getString(8));
+					}
+	
+					pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
+					pstmt.setInt(1, sb.getBoardNum());
+					photoResult = pstmt.executeQuery();
+					
+					if( photoResult.next() )
+						sb.setBoardPhoto(path + "PlitImage/" + photoResult.getString(2));
+					
+					arr.add(sb);
+				}
+            }
 
 			// =======================================================================
 		} catch (SQLException e) {
@@ -1576,114 +1681,6 @@ public class Dao {
 		return arr;
 	}
 
-	public ArrayList<Read_Comment> read_comment(String board_num) {
-		
-		ArrayList<Read_Comment> arr = new ArrayList<Read_Comment>();
-		Read_Comment rc = null;
-
-		try {
-
-			pstmt = conn.prepareStatement(
-					"SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num = ?");
-			pstmt.setInt(1, Integer.parseInt(board_num));
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				rc = new Read_Comment();
-
-				rc.setBoardNum(rs.getInt(1));
-				rc.setCommentNum(rs.getInt(2));
-				rc.setCommentDate(rs.getString(3));
-				rc.setCommentContent(rs.getString(4));
-				rc.setCommentId(rs.getString(5));
-
-				if (rs.getString(6).equals("No Photo")) {
-					rc.setUserPhoto(rs.getString(6));
-				} else {
-					rc.setUserPhoto(path + "PlitImage/" + rs.getString(6));
-				}
-				
-				arr.add(rc);
-
-			}
-			// =======================================================================
-		} catch (SQLException e) {
-			System.out.println("Read_Comment SQL error");
-			e.printStackTrace();
-			return null;
-		} catch (Exception e) {
-			System.out.println("Read_Comment SQL Exception");
-			e.printStackTrace();
-			return null;
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-			} catch (Exception e) {
-			}
-			try {
-				if (pstmt != null)
-					pstmt.close();
-			} catch (Exception e) {
-			}
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (Exception e) {
-			}
-		}
-
-		return arr;
-	}
-
-	public String write_Comment(String board_num, String user_name, String content) {
-		System.out.println("DAO Insert Strting");
-		String result = "-5";
-
-		try {
-
-			pstmt = conn.prepareStatement(
-					"INSERT INTO comment(board_num,comment_date,comment_content,comment_ID) VALUES (?,SYSDATETIME,?,?)");
-			pstmt.setInt(1, Integer.parseInt(board_num));
-			pstmt.setString(2, content);
-			pstmt.setString(3, user_name);
-
-			int i = pstmt.executeUpdate();
-
-			pstmt = conn.prepareStatement("UPDATE board SET comment_cnt = comment_cnt + 1 WHERE board_num = ?");
-			pstmt.setInt(1, Integer.parseInt(board_num));
-
-			i = pstmt.executeUpdate();
-
-			result = i + "";
-
-			// =======================================================================
-		} catch (SQLException e) {
-			System.out.println("Login 1");
-			e.printStackTrace();
-		} catch (Exception e) {
-			System.out.println("Login 2");
-			e.printStackTrace();
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-			} catch (Exception e) {
-			}
-			try {
-				if (pstmt != null)
-					pstmt.close();
-			} catch (Exception e) {
-			}
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (Exception e) {
-			}
-		}
-		return result;
-	}
-
 	public Read_Board_Info read_board_info(int board_num, String user_name) {
 			
 		Read_Board_Info rbi = null;
@@ -2023,5 +2020,391 @@ public class Dao {
 		}
 		return result;
 
+	}
+
+    public int write_Comment(int board_num, String userId, String content, String pw, String nickname, int guestPhoto, String contentPhoto)
+    {
+    	    	System.out.println("DAO Insert Strting");
+    	    	int result = -1;
+    	    	String user_nickname = nickname;
+    	    
+    	    	try { 
+    	    		pstmt = conn.prepareStatement("INSERT INTO comment("
+    	    				+ "board_num,"
+    	    				+ "comment_date,"
+    	    				+ "comment_content,"
+    	    				+ "comment_ID,"
+    	    				+ "comment_photo,"
+    	    				+ "comment_pw,"
+    	    				+ "comment_nickname,"
+    	    				+ "user_photo) VALUES(?,SYSDATETIME,?,?,?,?,?,?)");
+    	    		pstmt.setInt(1, board_num);
+    	    		pstmt.setString(2, content);
+    	    		pstmt.setString(3, userId);
+    	    		pstmt.setString(4, contentPhoto);
+    	    		pstmt.setString(5, pw);
+    	    		pstmt.setString(6, user_nickname);
+    	    		pstmt.setInt(7, guestPhoto);
+    	    		
+    	    		int i = pstmt.executeUpdate();
+    	    		
+    	    		pstmt = conn.prepareStatement("SELECT comment_num FROM comment WHERE board_num = ? ORDER BY comment_num DESC LIMIT 1");
+    	    		pstmt.setInt(1, board_num);
+    	    		
+    	    		
+    	    		rs = pstmt.executeQuery();
+    	    		
+    	    		if(rs.next())
+    	    		{
+    	    			result = rs.getInt(1); // 코멘트 num 반환
+    	    		}   	    		
+    	    	   	    		
+    	        	    		
+    	    		pstmt = conn.prepareStatement("UPDATE board SET comment_cnt = comment_cnt + 1 WHERE board_num = ?");
+    	    		pstmt.setInt(1, board_num);
+    	    		
+    	    		i = pstmt.executeUpdate();
+    	    		
+    	   //=======================================================================
+    	    	} catch ( SQLException e ) {
+    	    		System.out.println("Login 1");
+    	    		e.printStackTrace();
+    	    	} catch ( Exception e ) {
+    	    		System.out.println("Login 2");
+    	    		e.printStackTrace();
+    	    	} finally {
+    	    		try{	  
+    	    			if ( rs != null ) rs.close();
+    	    		}catch( Exception e ) {}	
+    	    		try{
+    	    			if ( pstmt != null ) pstmt.close();
+    	    		}catch( Exception e ) {}
+    	    		try{
+    	    			if ( conn != null ) conn.close();
+    	    		}catch( Exception e ) {}
+    	    	}
+    	return result;
+    }
+    public int modify_Comment(int board_num, int commentNum, String content, String comment_photo, boolean isDel, String contextPath )
+    {
+    	    	int result = -1;
+    	    
+    	    	try { 
+
+    	    		if( isDel )
+    	    		{
+    					pstmt = conn.prepareStatement("SELECT comment_photo FROM comment WHERE board_num = ? And comment_num = ?");
+        	    		pstmt.setInt(1, board_num);
+        	    		pstmt.setInt(2, commentNum);
+    					rs = pstmt.executeQuery();
+    					
+    					if(rs.next()) {
+    						String dir = contextPath + "PlitImage/" + rs.getString(1);
+    						File file = new File(contextPath + "PlitImage/" + rs.getString(1));
+
+    						if (file.exists()) 
+    						{
+    							file.delete();
+    						} 
+    						else 
+    						{
+    							System.out.println( dir + "파일이 존재하지 않습니다.");
+    						}
+    					}
+    					result = 1;
+    	    		}
+    	    		
+    	    		if( isDel ) // 이전 이미지 삭제버튼을 눌렀냐
+    	    		{
+    	    			pstmt = conn.prepareStatement("UPDATE comment SET comment_date = SYSDATETIME, comment_content = ?, comment_photo = ? WHERE board_num = ? AND comment_num = ?");
+    	    			
+        	    		pstmt.setString(1, content);
+        	    		pstmt.setString(2, comment_photo);
+        	    		pstmt.setInt(3, board_num);
+        	    		pstmt.setInt(4, commentNum);
+        	    		
+        	    		result = 1;
+    	    		}
+    	    		else // 삭제버튼 안누름
+    	    		{
+    	    			pstmt = conn.prepareStatement("UPDATE comment "
+        	    				+ "SET comment_date = SYSDATETIME, "
+        	    				+ "comment_content = ? "
+        	    				+ "WHERE "
+        	    				+ "board_num = ? AND comment_num = ?");
+    	    			
+        	    		pstmt.setString(1, content);
+        	    		pstmt.setInt(2, board_num);
+        	    		pstmt.setInt(3, commentNum);
+        	    		
+        	    		 result = 1;
+    	    		}
+    	    		
+    	    		int i = pstmt.executeUpdate();
+    	    		
+    	   //=======================================================================
+    	    	} catch ( SQLException e ) {
+    	    		e.printStackTrace();
+    	    	} catch ( Exception e ) {
+    	    		e.printStackTrace();
+    	    	} finally {
+    	    		try{	  
+    	    			if ( rs != null ) rs.close();
+    	    			if ( pstmt != null ) pstmt.close();
+    	    			if ( conn != null ) conn.close();
+    	    		}catch( Exception e ) {}
+    	    	}
+    	return result;
+    }
+
+    public ArrayList<Comment> read_comment(int board_num)
+    {
+    	Comment c = null;
+    	ArrayList<Comment> arr = null;
+    	
+    	try {                                                                                                                                                                                 
+
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo , a.comment_photo, a.comment_pw, a.comment_nickname, a.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num = ?");
+    		pstmt.setInt(1, board_num);
+    		rs = pstmt.executeQuery();
+    		
+    		arr = new ArrayList<Comment>();
+    		
+    		while(rs.next())
+    		{
+    	    	c = new Comment();
+    			
+    			c.board_num = rs.getInt(1);
+    			c.comment_num = rs.getInt(2);
+    			c.comment_date = rs.getString(3);
+    			c.comment_content = rs.getString(4);
+    			c.comment_id = rs.getString(5);
+    			if(rs.getString(6).equals("No Photo"))
+    			{
+    				c.user_photo = rs.getString(6);
+    			}
+    			else
+    			{
+    				c.user_photo = path+"PlitImage/"+rs.getString(6);
+    			}
+    			if(rs.getString(7).equals("No Photo"))
+    			{
+    				c.comment_photo = rs.getString(7);
+    			}
+    			else
+    			{
+    				c.comment_photo = path+"PlitImage/"+rs.getString(7);
+    			}
+    			
+    			c.comment_pw = rs.getString(8);
+    			c.comment_nickname = rs.getString(9);
+    			c.guest_photo = rs.getInt(10);
+    			arr.add(c);
+    			
+    		}
+
+   //=======================================================================
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    		}catch( Exception e ) {}	
+    		try{
+    			if ( pstmt != null ) pstmt.close();
+    		}catch( Exception e ) {}
+    		try{
+    			if ( conn != null ) conn.close();
+    		}catch( Exception e ) {}
+    	}
+    	
+    	return arr;
+    }
+    
+    public ArrayList<Comment> read_comment_from_one_user(String id)
+    {
+    	Comment c = null;
+    	ArrayList<Comment> arr = null;
+    	ArrayList<Integer> boardNums = new ArrayList<Integer>();
+    	
+    	try {                               
+    		String str = "SELECT board_num FROM board WHERE id = ?";
+    		pstmt = conn.prepareStatement(str);
+    		pstmt.setString(1, id);
+    		rs = pstmt.executeQuery();
+
+    		while(rs.next())
+    		{
+    			boardNums.add(rs.getInt(1));
+    		}
+
+    		arr = new ArrayList<Comment>();
+    		
+    		for( int i=0; i<boardNums.size(); i++)
+    		{
+        		pstmt = conn.prepareStatement("SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo , a.comment_photo, a.comment_pw, a.comment_nickname, a.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num = ?");
+        		pstmt.setInt(1, boardNums.get(i) );
+        		rs = pstmt.executeQuery();
+        		
+        		while(rs.next())
+        		{
+        	    	c = new Comment();
+        			
+        			c.board_num = rs.getInt(1);
+        			c.comment_num = rs.getInt(2);
+        			c.comment_date = rs.getString(3);
+        			c.comment_content = rs.getString(4);
+        			c.comment_id = rs.getString(5);
+        			if(rs.getString(6).equals("No Photo"))
+        			{
+        				c.user_photo = rs.getString(6);
+        			}
+        			else
+        			{
+        				c.user_photo = path+"PlitImage/"+rs.getString(6);
+        			}
+        			if(rs.getString(7).equals("No Photo"))
+        			{
+        				c.comment_photo = rs.getString(7);
+        			}
+        			else
+        			{
+        				c.comment_photo = path+"PlitImage/"+rs.getString(7);
+        			}
+        			
+        			c.comment_pw = rs.getString(8);
+        			c.comment_nickname = rs.getString(9);
+        			c.guest_photo = rs.getInt(10);
+        			arr.add(c);
+        		}
+    		}
+    		
+
+   //=======================================================================
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    		}catch( Exception e ) {}	
+    		try{
+    			if ( pstmt != null ) pstmt.close();
+    		}catch( Exception e ) {}
+    		try{
+    			if ( conn != null ) conn.close();
+    		}catch( Exception e ) {}
+    	}
+    	
+    	return arr;
+    }
+    
+    public Comment read_comment_once(int board_num, int commentNum)
+    {
+    	Comment c = null;
+    	
+    	try {                                                                                                                                                                                 
+
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo , a.comment_photo, a.comment_pw, a.comment_nickname, a.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num = ? AND a.comment_num = ?");
+    		pstmt.setInt(1, board_num);
+    		pstmt.setInt(2, commentNum);
+    		rs = pstmt.executeQuery();
+    		
+    		if(rs.next())
+    		{
+    	    	c = new Comment();
+    			
+    			c.board_num = rs.getInt(1);
+    			c.comment_num = rs.getInt(2);
+    			c.comment_date = rs.getString(3);
+    			c.comment_content = rs.getString(4);
+    			c.comment_id = rs.getString(5);
+    			if(rs.getString(6).equals("No Photo"))
+    			{
+    				c.user_photo = rs.getString(6);
+    			}
+    			else
+    			{
+    				c.user_photo = path+"PlitImage/"+rs.getString(6);
+    			}
+    			if(rs.getString(7).equals("No Photo"))
+    			{
+    				c.comment_photo = rs.getString(7);
+    			}
+    			else
+    			{
+    				c.comment_photo = path+"PlitImage/"+rs.getString(7);
+    			}
+    			
+    			c.comment_pw = rs.getString(8);
+    			c.comment_nickname = rs.getString(9);
+    			c.guest_photo = rs.getInt(10);
+    			
+    		}
+
+   //=======================================================================
+    	} catch ( SQLException e ) {
+    		System.out.println("Login 1");
+    		e.printStackTrace();
+    	} catch ( Exception e ) {
+    		System.out.println("Login 2");
+    		e.printStackTrace();
+    	} finally {
+    		try{	  
+    			if ( rs != null ) rs.close();
+    		}catch( Exception e ) {}	
+    		try{
+    			if ( pstmt != null ) pstmt.close();
+    		}catch( Exception e ) {}
+    		try{
+    			if ( conn != null ) conn.close();
+    		}catch( Exception e ) {}
+    	}
+    	
+    	return c;
+    }
+
+	public String get_user_photo( String id ) {
+		String result = "No Photo";
+
+		try 
+		{
+			pstmt = conn.prepareStatement("SELECT user_photo FROM user_info WHERE id = ?;");
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				result = "PlitImage/" + rs.getString(1);
+			}
+
+			// =======================================================================
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} 
+			catch (Exception e) {
+			}
+		}
+
+		return result;
 	}
 }

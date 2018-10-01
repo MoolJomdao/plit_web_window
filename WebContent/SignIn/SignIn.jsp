@@ -45,6 +45,10 @@
 		<input type="submit" value="SIGN IN" class="submit" id ="signIn"> </input>
 	</div>
 	</form>
+	
+	<form action="guestLogin.bo" method="POSt" accept-charset="utf-8" >
+		<input type="submit" value="GUEST 접속" class="submit" id ="guest"> </input>
+	</form>
 </div>
 
 </body>

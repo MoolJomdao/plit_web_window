@@ -212,7 +212,7 @@ public class StorePageDao {
 				mypage.address = GTA.getAddress().replace("대한민국 ", "");
 			}
 			else
-				mypage.address = "위치를 입력해주세요.";
+				mypage.address = "No Location";
 
 			if (rs.getString(2).equals("No Photo")) {
 				mypage.userPhoto = null;

@@ -20,9 +20,14 @@ public class StorePageAction implements Action{
 			HttpSession session = request.getSession();
 			String sessionId = (String)session.getAttribute("id"); //
 			String clickId = request.getParameter("userId");
+			String isme = null;
+			isme = request.getParameter("isme");
 	   		
 			StorePageDao dao = new StorePageDao();
-			request.setAttribute( "mypage", dao.read_myPage(clickId) );
+			if( isme != null )
+				request.setAttribute( "mypage", dao.read_myPage(clickId) );
+			else
+				request.setAttribute( "mypage", dao.read_myPage(sessionId) );
 			
 	   		forward.setRedirect(false);
 	   		forward.setPath("html/storePage.jsp");

@@ -11,6 +11,7 @@
 	Read_Board board = (Read_Board)request.getAttribute("board");
 	
 	String content = board.getContent();
+	content = content.replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
 	ArrayList<String> photos = board.photos;
 	
 	double lat = board.getBoardLatitude();
@@ -44,8 +45,6 @@
 			<nav class="navbar navbar-inverse">
 			  <div class="container-fluid">
 			    <div class="navbar-header">
-			    	<!-- 로고 부분 ( 브랜드 명 )-->
-			     	<a class="navbar-brand" href="#" id='sns'> SNS </a>
 			    </div>
 
 			    <!-- 우측 nav -->

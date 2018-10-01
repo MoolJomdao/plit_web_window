@@ -48,7 +48,11 @@ public class BoardListAction implements Action{
 		   		
 			arr = dao.read_board_List();
 			
+			Dao nicknameDao = new Dao();
+			String nickname = nicknameDao.get_nickname( id );
+			
 			request.setAttribute("rbl", arr);
+			request.setAttribute("nickname", nickname);
 		   	forward.setRedirect(false);
 	   		forward.setPath("/html/mainPage.jsp");
 	   		

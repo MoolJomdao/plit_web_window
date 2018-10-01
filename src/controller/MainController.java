@@ -14,6 +14,7 @@ import action.BoardListAction;
 import action.BoardModifyAction;
 import action.BoardWriteAction;
 import action.JoinUserAction;
+import action.LoginGuestAction;
 import action.LoginUserAction;
 import action.SearchListAction;
 import action.StorePageAction;
@@ -34,11 +35,16 @@ public class MainController extends javax.servlet.http.HttpServlet implements ja
 			ActionForward forward = null;
 			Action action = null;
 			
-			if( command.equals("/mainPageAction.bo") )
+			if( command.equals("/guestLogin.bo") )
+			{
+				action = new LoginGuestAction();
+				forward = action.execute(request, response);
+			}	
+			else if( command.equals("/mainPageAction.bo") )
 			{
 				action = new BoardListAction();
 				forward = action.execute(request, response);
-			}			
+			}		
 			else if( command.equals("/searchPage.bo") )
 			{
 				action = new SearchListAction();

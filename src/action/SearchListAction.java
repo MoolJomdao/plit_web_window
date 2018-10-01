@@ -17,6 +17,7 @@ public class SearchListAction implements Action{
 	{
 		try
 		{
+			request.setCharacterEncoding("utf-8");
 			ActionForward forward= new ActionForward();
 			HttpSession session = request.getSession();
 			
@@ -28,8 +29,8 @@ public class SearchListAction implements Action{
 				forward.setPath("./SignIn.me");
 				return forward;
 	   		}
-	   		
 	   		String searchStr = request.getParameter("searchStr");
+	   		String radioValue = request.getParameter("radioValue"); // context, location
 	   		
 		  	int page = 1;
 			int limit = 10; // �ѹ��� �ҷ��� �� ����
@@ -37,9 +38,16 @@ public class SearchListAction implements Action{
 			Dao dao = new Dao();
 			ArrayList<Read_Board_List> arr = new ArrayList<>();
 		   		
-			arr = dao.search_board( searchStr );
+			if( radioValue.equals("context") )
+				arr = dao.search_board( searchStr );
+			else if( radioValue.equals("location") )
+				arr = dao.search_board_from_location( searchStr );
+
+			Dao nicknameDao = new Dao();
+			String nickname = nicknameDao.get_nickname( id );
 			
 			request.setAttribute("rbl", arr);
+			request.setAttribute("nickname", nickname);
 		   	forward.setRedirect(false);
 	   		forward.setPath("/html/searchPage.jsp");
 	   		

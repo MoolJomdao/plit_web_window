@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="css/searchPage.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 	
 	<% 
 		request.setCharacterEncoding("utf-8");
@@ -32,7 +32,8 @@
 		
 		ArrayList<Read_Board_List> arr = new ArrayList<Read_Board_List>();
 		arr = ( ArrayList<Read_Board_List> )request.getAttribute("rbl");
-		
+
+		String nickname = (String)request.getAttribute("nickname");
 	%>
 	
 	
@@ -56,7 +57,11 @@
 
 		    <!-- 우측 nav -->
 		  	<ul class="nav navbar-nav navbar-right">
-		  	   <li> <input> </input> </li>
+		  	   <li> 
+               		<label class="radio-inline"> <input type="radio" name="optradio" checked value="context"> 내용 </label>
+               		<label class="radio-inline"> <input type="radio" name="optradio" value="location"> 주소 </label>
+		  	   		<input> </input>
+		  	    </li>
   			   <li> <a href="#"> <img src="icon/search.png"> </a></li>
 		  	   <li> <a href="./html/writeBoard.jsp"> 글쓰기 </a></li>
 		  	   <%
@@ -65,7 +70,15 @@
 		  	   		else
 		  	   			loginStat = "Logout";
 		  	   %>
-		  	   		<li> <a href="SignIn.me"> <%= loginStat %> </a></li>
+		  	   	<li> <a href="SignIn.me"> <%= loginStat %> </a></li>
+		  	   <%
+		  	   	if( !ses.getAttribute("id").equals("Guest"))
+		  	   	{
+		  	   %>
+		  	   	<li> <a href="storePage.bo"> <%= nickname %> </a> </li>
+		  	   <%
+		  	   	}	
+		  	   %>
 		  	</ul>
 		  </div>
 		</nav>
@@ -102,7 +115,7 @@
 				if( boardPhoto != null )
 				{
 		%>
-					<img src='<%=boardPhoto%>'> <!-- 대표 사진 -->
+					<img src='<%=boardPhoto%>' onclick='imgClick(<%= arr.get(i).getBoardNum()%>)'> <!-- 대표 사진 -->
 		<% 
 				}
 		%>
@@ -113,12 +126,21 @@
 						<div class="profile"> 
 						<form action='storePage.bo' accept-charset='utf-8' method='POST'>
 							<input type='hidden' name='userId' value=<%= userId %>>
-							<input class="send" type='submit'>
+							<input type='hidden' name='isme' value="true">
+							<input class="send" type='submit' style="display:none">
 						</form>
 							<img src=<%= userPhoto %> onclick=userIconButtonClick(<%= i %>) > 
 						</div> 
 						<!-- 사용자 이름 -->
 						<h5 onclick=userIconButtonClick(<%= i %>)> <%= arr.get(i).storeName %>  </h5> 
+					</div>
+					<div class='bottom'>
+						<form action="reviewPage.store" method="POST" accept-charset="utf-8">
+							<input type="hidden" name="boardId" value="<%=userId%>">
+							<input type="hidden" name="boardNum" value="<%=boardNum%>">
+							<input type="hidden" name="prevPage" value="mainPageAction.bo">
+							<input type="submit" value="">
+						</form>
 					</div>
 				</div>
 		<% 
@@ -126,8 +148,21 @@
 		%>
 		</div>
 	</div>
+	
+	<!-- 이미지 클릭 시 나타날 html -->
+	<div id="img_section">
+		<div id="album_section">   
+			<div class="arrow"> <img src="icon/left-arrow1.png"> </div>      
+			<ul>
+			</ul>
+			<div class="arrow"> <img src="icon/right-arrow1.png"></div>      
+		</div>      
+		<div id="currentImg"> <img id='cImg' src=""> <img src="icon/cancel2.png" id="back"> </div>
+   	</div>
+	
 	<form action='searchPage.bo' accept-charset='utf-8' method='POST'>
 		<input id='searchStr' type='hidden' name='searchStr'>
+		<input id='radioValue' type='hidden' name='radioValue' value=''>
 		<input id="searchBtn" type='submit' style='display:none;'>
 	</form>
 </body>
@@ -139,32 +174,122 @@
 		$(inputs[i]).click();
 	}
 
-	$(function(){
-		var onClick = false;
-		var $input = $(".navbar-right input");
-		// search 버튼 클릭시
-		$(".navbar-right").children().eq(1).click(function(){
+	   $(function(){
+	      var onClick = false;
+	      var $input = $(".navbar-right li > input");
+	      var $radiobtn = $(".radio-inline");
+	      var radiochecked;
 
-			if(onClick == false)
-			{
-				onClick = true;
-				$input.css({ width: "200px", paddingLeft: "10px" });
-			}
-			else
-			{
-				var str = $input.val();
-				if( $input.val() != "" ){ // 검색어를 입력 했으면
-					$('#searchStr').val( $input.val() ); // input 태그에 검색할 단어 넣고
-					$('#searchBtn').click(); // searchPage.bo 호출
-					return;
-				}
-				
-				onClick = false;
-				$input.css({ width: "0px", paddingLeft: "0px" });
-				$input.val('');
-				
-			}
-			
-		})
+	      // search 버튼 클릭시
+	      $(".navbar-right").children().eq(1).click(function(){
+
+	         if(onClick == false)
+	         {
+	            onClick = true;
+	            $input.css({ width: "200px", paddingLeft: "10px" });
+	            $radiobtn.css("visibility", "visible");
+	         }
+	         else
+	         {
+	            if( $input.val() != "" ){ // 검색어를 입력 했으면
+
+	               radiochecked = $('input[name="optradio"]:checked').val(); // 선택된 라디오 버튼 value 값 context, location
+	               $('#searchStr').val( $input.val() ); // input 태그에 검색할 단어 넣고
+	               $('#radioValue').val( radiochecked );
+	               $('#searchBtn').click(); // searchPage.bo 호출
+	               return;
+	            }
+	            
+	            onClick = false;
+	            $input.css({ width: "0px", paddingLeft: "0px" });
+	            $radiobtn.css("visibility", "hidden");
+	            $input.val('');
+	            
+	         }
+	         
+	      })
+	   })
+	
+	/** 게시글 사진 클릭 시 확대해서  **/
+	$(function(){
+	   var onClick = false;
+	   var $input = $(".navbar-right input");
+	   $("#img_section").css("min-height", screen.height);
+	
+	
+	   // 이미지 상세 보기에서 다시 돌아가기
+	   $("#back").click(function(){
+	      $("#img_section").css("display", "none");
+	   });
+	
+	   // 앨범 영역 화살표 이벤트 
+	   $(".arrow").eq(0).click(function(){
+	      // 왼쪽
+	      scrollAlbum(300, "left", 300);
+	   });
+	
+	   $(".arrow").eq(1).click(function(){
+	      // 오른쪽 
+	      scrollAlbum(300, "right", 300);
+	   });
 	})
+
+	function scrollAlbum(space, direction, duration){
+	   /*
+	    * space: 엘범 움직이는 거리 정도
+	    * direction: 왼쪽 / 오른쪽 
+	    * duration: 슬라이드 속도
+	   */
+	
+	   if( direction == "left")
+	   {
+	      var a = $("#album_section > ul").scrollLeft() - space;
+	   }
+	   else
+	   {
+	      var a = $("#album_section > ul").scrollLeft() + space;
+	   }
+	
+	   $("#album_section > ul").animate({
+	       scrollLeft: a
+	   }, duration);
+	}
+
+	// .card > img 클릭시 이미지 상세 보기
+	function imgClick( boardNum ){
+		   
+		   $.ajax({
+	            type : "POST", 
+	            url : "getBoardPhotos.bo", // url을 서버로 보내주면 지정 서블릿이 실행
+	            data : { "boardNum": boardNum }, // 서버에서 사용할 메소드를 type 에다가 넣어준다
+	            dataType : "json",
+	            
+	            success : function( data )
+	            {
+	            	var arr = data;
+	            	
+	            	for( var i=0; i<arr.length; i++)
+	            	{
+	            		var str = "<li class='albumImg no-drag'> <img src='" + arr[i] + "'> </li>"
+	  	      	      	// 이미지 불러와서 
+	  	      	      	$("#album_section ul").append(str);
+	            	}
+            		$('#currentImg #cImg').attr('src', arr[0]);
+
+            		// 작은 사진 클릭시 큰 화면으로 띄우기
+            		$(".albumImg").click(function(){
+            		   var index = $(this).index();
+            		
+            		   var imgsrc = $(".albumImg > img").eq(index).attr("src");
+            		   $("#currentImg > img").eq(0).attr("src", imgsrc);
+            		});	
+	            },
+	            
+	            error : function()
+	            {
+	                alert("변경 실패");
+	            }                
+	        });
+	      $("#img_section").css("display", "block");
+	 }
 </script>

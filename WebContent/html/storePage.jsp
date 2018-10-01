@@ -4,6 +4,7 @@
 <html>
 <head>
 <%
+	request.setCharacterEncoding("utf-8");
 	String id = (String)session.getAttribute("id");
 	Read_Mypage mypage = (Read_Mypage)request.getAttribute("mypage");
 	mypage.message = mypage.message.replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
@@ -296,8 +297,9 @@
 	</form>
 	
 	<!-- reviewPage 누르면 id값 가지고 이동해야해서 form 태그 사용 -->
-	<form action='reviewPage.store' method='POST' accept-charset='utf-8'>
-		<input type='hidden' name='reviewPageId' value='<%= mypage.userId %>'>
+	<form action='reviewPageFromStorePage.store' method='POST' accept-charset='utf-8'>
+		<input type='hidden' name='userId' value='<%= mypage.userId %>'>
+		<input type="hidden" name="prevPage" value="storePage.bo">	
 		<input id='reviewPageButton' type='submit' >
 	</form>
 </body>
