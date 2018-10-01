@@ -1328,7 +1328,7 @@ public class DAO
     			}  			
     			jtmp.put("category",rs.getInt(9));
     			jtmp.put("comment_cnt",rs.getInt(10));
-    			jtmp.put("nickname",rs.getString(7));
+    			jtmp.put("nickname",rs.getString(11));
     			jrr.put(jtmp);
     			count++;
     			
@@ -1407,7 +1407,7 @@ public class DAO
     			}
     			jtmp.put("category",rs.getInt(9));
     			jtmp.put("comment_cnt",rs.getInt(10));
-    			jtmp.put("nickname",rs.getString(7));
+    			jtmp.put("nickname",rs.getString(11));
     			jrr.put(jtmp);
     			count++;
     			
