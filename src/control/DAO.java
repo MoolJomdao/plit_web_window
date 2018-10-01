@@ -1189,7 +1189,6 @@ public class DAO
     		result.put("latitude",rs.getDouble(8));
     		result.put("longitude",rs.getDouble(9));
     		System.out.println("mypage json end");
-    			
     		
     		
 
