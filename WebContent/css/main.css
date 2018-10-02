@@ -82,7 +82,6 @@
 }
 .profile img{
    padding: 0px;
-   border-radius: 100px;
 }
 
 .card h5{
@@ -93,10 +92,18 @@
 
 /************************************/
 
+#backgroundA{
+  position: absolute;
+   width: 100%;
+   background-color: rgba( 0, 0, 0, 0.3);
+   top: 0;
+   left: 0;
+   visibility: hidden;
+}
+
 #img_section{
    position: absolute;
    width: 100%;
-   background-color: rgba( 0, 0, 0, 0.3);
    top: 0;
    left: 0;
    display: none;

@@ -11,7 +11,7 @@
 	Read_Board board = (Read_Board)request.getAttribute("board");
 	
 	String content = board.getContent();
-	content = content.replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
+	//content = content.replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
 	ArrayList<String> photos = board.photos;
 	
 	double lat = board.getBoardLatitude();
@@ -130,7 +130,6 @@
 	var countOfImage = <%=board.photos.size()%>;
 
 	$(document).ready(function(){
-		
 	    $("#upload_click").click( function( event ) {
 	        event.preventDefault(); // 기존 리다이렉트 되는 이벤트 제거
 	        $("#upload").click();

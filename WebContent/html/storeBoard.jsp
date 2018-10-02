@@ -233,7 +233,7 @@
 
 	// .card > img 클릭시 이미지 상세 보기
 	function imgClick( boardNum ){
-		   
+			$("#album_section ul").empty();
 		   $.ajax({
 	            type : "POST", 
 	            url : "getBoardPhotos.bo", // url을 서버로 보내주면 지정 서블릿이 실행

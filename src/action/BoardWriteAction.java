@@ -55,7 +55,7 @@ public class BoardWriteAction implements Action{
 			String board_num = null;
 			String id = (String)session.getAttribute("id");
 			String content = (String) (multi.getParameter("content") == null ? null:multi.getParameter("content"));
-			String tag = (String) (multi.getParameter("tag") == null ? null:multi.getParameter("tag"));
+			String tag = (String) (multi.getParameter("tag") == null ? "#":multi.getParameter("tag"));
 			double latitude = (double) Double.parseDouble( multi.getParameter("lat") );
 			double longitude = (double) Double.parseDouble( multi.getParameter("lng") );
 			int category = (int) (multi.getParameter("category") == null ? 0:multi.getParameter("category"));
@@ -79,8 +79,8 @@ public class BoardWriteAction implements Action{
 			        	newName = name  + ext;
 			        }
 					
-					File oldFile = new File( savePath + "\\" + fileName );
-					File newFile = new File( savePath + "\\" + newName );
+					File oldFile = new File( savePath + "/" + fileName );
+					File newFile = new File( savePath + "/" + newName );
 					oldFile.renameTo( newFile );
 					
 					fileNames.add( newName ); 

@@ -7,6 +7,7 @@
 	request.setCharacterEncoding("utf-8");
 	String id = (String)session.getAttribute("id");
 	Read_Mypage mypage = (Read_Mypage)request.getAttribute("mypage");
+	String clickId = (String)request.getAttribute("userId");
 	mypage.message = mypage.message.replaceAll("\\r\\n|\\r|\\n","<br>"); // text에서 줄바꿈 문자 <br>로 변경
 %>
    <title></title>
@@ -83,7 +84,8 @@
               callback: function (result) {
             	  if( !checkEmpty(result) )
     	          {
-                  	// 입력 확인 후 이벤트 
+                  	// 입력 확인 후 이벤트
+	        		result = result.replace('/(\r\n|\r|\n)/g', '\\r\\n');
                   	updateSettingData( "storeMessageChange.store", {"message" : result}, $settingItem.eq( index ) );
     	          }
               }
@@ -123,7 +125,7 @@
                 
                 formData.append("img", $("#upload")[0].files[0] );
                 
-                var id = <%=id%>;
+                var id = "<%=id%>";
                 if( id == undefined )
                 {
                 	alert("로그인이 되어있지 않습니다. 재로그인 요망");
@@ -182,6 +184,7 @@
                
                success : function( data )
                {
+            	   data = data.replace(/(\r\n|\r|\n)/g, '<br>');
                   $item.html( data );
                },
                
@@ -292,13 +295,13 @@
 	
 	<!-- storeBoard 누르면 id값 가지고 이동해야해서 form 태그 사용 -->
 	<form action='storeBoard.store' method='POST' accept-charset='utf-8'>
-		<input type='hidden' name='storeBoardId' value='<%= mypage.userId %>'>
+		<input type='hidden' name='storeBoardId' value='<%= clickId %>'>
 		<input id='storeBoardButton' type='submit' >
 	</form>
 	
 	<!-- reviewPage 누르면 id값 가지고 이동해야해서 form 태그 사용 -->
 	<form action='reviewPageFromStorePage.store' method='POST' accept-charset='utf-8'>
-		<input type='hidden' name='userId' value='<%= mypage.userId %>'>
+		<input type='hidden' name='userId' value='<%= clickId %>'>
 		<input type="hidden" name="prevPage" value="storePage.bo">	
 		<input id='reviewPageButton' type='submit' >
 	</form>

@@ -80,8 +80,8 @@ public class BoardModifyAction implements Action{
 			        	newName = name  + ext;
 			        }
 					
-					File oldFile = new File( savePath + "\\" + fileName );
-					File newFile = new File( savePath + "\\" + newName );
+					File oldFile = new File( savePath + "/" + fileName );
+					File newFile = new File( savePath + "/" + newName );
 					oldFile.renameTo( newFile );
 					
 					fileNames.add( newName ); 

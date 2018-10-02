@@ -1084,16 +1084,20 @@ public class Dao {
 			pstmt.setString(1, user_name);
 			rs = pstmt.executeQuery();
 
-			rs.next();
+			if( rs.next() )
+			{
 
-			read_board.setUserId(rs.getString(1));
-
-			if (rs.getString(5).equals("No Photo")) {
-				read_board.setUserPhoto(rs.getString(5));
-			} else {
-				read_board.setUserPhoto(path + "PlitImage/" + rs.getString(5));
+				read_board.setUserId(rs.getString(1));
+				read_board.lat = rs.getDouble(8);
+				read_board.lng = rs.getDouble(9);
+	
+				if (rs.getString(5).equals("No Photo")) {
+					read_board.setUserPhoto(rs.getString(5));
+				} else {
+					read_board.setUserPhoto(path + "PlitImage/" + rs.getString(5));
+				}
+				read_board.setMassage(rs.getString(6));
 			}
-			read_board.setMassage(rs.getString(6));
 
 			// =======================================================================
 		} catch (SQLException e) {

@@ -244,9 +244,10 @@ public class StorePageController extends javax.servlet.http.HttpServlet implemen
 					        	ext = fileName.substring(index);
 					        	newName = name  + ext;
 					        }
-							
-							File oldFile = new File( savePath + "\\" + fileName );
-							File newFile = new File( savePath + "\\" + newName );
+							System.out.println("oldFile : " + savePath + "/" + fileName);
+							System.out.println("newFile : " + savePath + "/" + newName);
+							File oldFile = new File( savePath + "/" + fileName );
+							File newFile = new File( savePath + "/" + newName );
 							oldFile.renameTo( newFile );
 							
 							dao = new StorePageDao();

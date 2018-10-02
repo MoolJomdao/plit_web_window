@@ -202,7 +202,7 @@
 						<input id="upload" type="file" accept="image/*" name="boardPhoto[]" enctype="multipart/form-data">
 						<!-- 이미지 뜨는 곳 -->
 						<div id="img" style="background-image : url('<%=comment.comment_photo%>')">
-							<button id="del"> 삭제 </button>
+							<button id="del" onclick="javascript:location.href='#'"> 삭제 </button>
 						</div>
 					</div>
 				</div>

@@ -1,10 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="bean.Read_Mypage"%>
+<%@page import="dao.Dao"%>
+<%@page import="db.GpsToAddress"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <%
 	String id = (String)session.getAttribute("id");
-	//String id = request.getParameter("id");
+
+	Dao dao = new Dao();
+	Read_Mypage myPage = dao.read_myPage(id);
+	
+	double lat = myPage.lat;
+	double lng = myPage.lng;
+	String address = "주소 없음";
+	// 지오코더 이용하여 주소 값 가져오기
+	if( lat != 0.0 && lng != 0.0 )
+	{
+		GpsToAddress GTA = new GpsToAddress( lat, lng );
+		address = GTA.getAddress().replace("대한민국 ", "");
+	}
 %>
 <head>
 	<title></title>
@@ -42,11 +57,11 @@
 		<div class="wrap">
 			<!-- 위치 부분 -->
 			<div class="location_section">
-				<div>위치 입력...</div>
+				<div><%=address%></div>
 				<button id="location_button" type="button" value="위치받아오기"> </button>
-				<input id="address" type="hidden" value="서울시">
-				<input id="lat" type="hidden" value="0.0">
-                <input id="lng" type="hidden" value="0.0">
+				<input id="address" type="hidden" value="<%=address%>">
+				<input id="lat" type="hidden" value="<%=lat%>">
+                <input id="lng" type="hidden" value="<%=lng%>">
 			</div>
 
 			<div class="content_section" id="text_box"> 
@@ -180,7 +195,7 @@
 	        	return;
 	        }
 	        var textArea = $("#text_area").val(); // 글내용
-	        var str = textArea.replace(/(\r\n|\r|\n)/g, '\\r\\n');
+	        var str = textArea.replace('/(\r\n|\r|\n)/g', '\\r\\n');
 	        var locationText = $("#location_text").val();
 			var lat = document.getElementById("lat").value;
 			var lng = document.getElementById("lng").value;

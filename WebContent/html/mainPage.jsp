@@ -29,6 +29,7 @@
 		*/
 		String loginStat;
 		HttpSession ses = request.getSession();
+		String id = (String)ses.getAttribute("id");
 		
 		ArrayList<Read_Board_List> arr = new ArrayList<Read_Board_List>();
 		arr = ( ArrayList<Read_Board_List> )request.getAttribute("rbl");
@@ -75,7 +76,7 @@
 		  	   	if( !ses.getAttribute("id").equals("Guest"))
 		  	   	{
 		  	   %>
-		  	   	<li> <a href="storePage.bo"> <%= nickname %> </a> </li>
+		  	   	<li> <a href="#" onclick="userNameClick()"> <%= nickname %> </a> </li>
 		  	   <%
 		  	   	}	
 		  	   %>
@@ -126,7 +127,6 @@
 						<div class="profile"> 
 						<form action='storePage.bo' accept-charset='utf-8' method='POST'>
 							<input type='hidden' name='userId' value=<%= userId %>>
-							<input type='hidden' name='isme' value="true">
 							<input class="send" type='submit' style='display:none;'>
 						</form>
 							<img src=<%= userPhoto %> onclick=userIconButtonClick(<%= i %>) > 
@@ -149,7 +149,8 @@
 		%>
 		</div>
 	</div>
-	
+
+	<div id="backgroundA"></div>
 	<!-- 이미지 클릭 시 나타날 html -->
 	<div id="img_section">
 		<div id="album_section">   
@@ -166,14 +167,27 @@
 		<input id='radioValue' type='hidden' name='radioValue' value=''>
 		<input id="searchBtn" type='submit' style='display:none;'>
 	</form>
+	
+	
+						<form action='storePage.bo' accept-charset='utf-8' method='POST'>
+							<input type='hidden' name='userId' value=<%= id %>>
+							<input id="sendMyPage" type='submit' style='display:none;'>
+						</form>
 </body>
 </html>
 
 <script>
+
+	
    function userIconButtonClick( i ){
       var inputs = document.getElementsByClassName("send");
       $(inputs[i]).click();
    }
+   
+   function userNameClick( ){
+	      var inputs = document.getElementById("sendMyPage");
+	      $(inputs).click();
+	   }
    
    $(function(){
       var onClick = false;
@@ -215,11 +229,15 @@
    $(function(){
       var onClick = false;
       var $input = $(".navbar-right input");
-      $("#img_section").css("min-height", screen.height);
+      var $img_section =  $("#img_section");
+      var $backgroundA = $("#backgroundA");
+      $backgroundA.css("height", document.body.scrollHeight + $('header').height() );
+      $img_section.css("height", document.body.scrollHeight );
    
       // 이미지 상세 보기에서 다시 돌아가기
       $("#back").click(function(){
-         $("#img_section").css("display", "none");
+    	  $img_section.css("display", "none");
+    	  $backgroundA.css("visibility", "hidden");
       });
    
       // 앨범 영역 화살표 이벤트 
@@ -257,7 +275,8 @@
 
    // .card > img 클릭시 이미지 상세 보기
    function imgClick( boardNum ){
-         
+	   $("#album_section ul").empty();
+	   
          $.ajax({
                type : "POST", 
                url : "getBoardPhotos.bo", // url을 서버로 보내주면 지정 서블릿이 실행
@@ -276,6 +295,7 @@
                   }
                   $('#currentImg #cImg').attr('src', arr[0]);
 
+
                   // 작은 사진 클릭시 큰 화면으로 띄우기
                   $(".albumImg").click(function(){
                      var index = $(this).index();
@@ -291,5 +311,8 @@
                }                
            });
          $("#img_section").css("display", "block");
+         $("#backgroundA").css("visibility", "visible");
+         var scrollT = $(document).scrollTop();
+         $img_section.css("top", scrollT);
     }
 </script>
