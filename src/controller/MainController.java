@@ -22,7 +22,6 @@ import dao.Dao;
 
 public class MainController extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 	
-	
 		protected void doProcess(HttpServletRequest request, HttpServletResponse response) 
 				throws ServletException, IOException {
 

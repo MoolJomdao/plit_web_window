@@ -232,7 +232,6 @@
       var $img_section =  $("#img_section");
       var $backgroundA = $("#backgroundA");
       $backgroundA.css("height", document.body.scrollHeight + $('header').height() );
-      $img_section.css("height", document.body.scrollHeight );
    
       // 이미지 상세 보기에서 다시 돌아가기
       $("#back").click(function(){
