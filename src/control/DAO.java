@@ -1841,7 +1841,7 @@ public class DAO
     	
     	try {                                                                                                                                                                                 
 
-    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.hits, a.board_latitude,a.board_longitude,a.id,b.user_photo FROM board a, user_info b WHERE a.id = b.id AND a.board_num = ?");
+    		pstmt = conn.prepareStatement("SELECT a.board_num, a.board_content, a.date_board, a.good, a.hits, a.board_latitude,a.board_longitude,a.id,b.user_photo,b.nickname FROM board a, user_info b WHERE a.id = b.id AND a.board_num = ?");
     		pstmt.setInt(1,Integer.parseInt(board_num));
     		rs = pstmt.executeQuery();
     		
@@ -1873,6 +1873,7 @@ public class DAO
     		{
     			j.put("is_good",0);
     		}
+    		j.put("nickname",rs.getString(10));
     		
     		
     		pstmt = conn.prepareStatement("SELECT * FROM board_photo WHERE board_num = ?;");
