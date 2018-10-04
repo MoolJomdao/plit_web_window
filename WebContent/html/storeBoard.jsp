@@ -38,7 +38,7 @@
 		<nav class="navbar navbar-inverse">
 		  <div class="container-fluid">
 		    <div class="navbar-header">
-		    	<a class="navbar-brand" href="#" onclick="backButtonClick(<%= pageId%>)"> <img src="icon/back.png" width="18px" padding="15px" > </a> <!-- 뒤로 가기 -->
+		    	<a class="navbar-brand" href="#" onclick="backButtonClick('<%= pageId%>')"> <img src="icon/back.png" width="18px" padding="15px" > </a> <!-- 뒤로 가기 -->
 		      	<a class="navbar-brand" href="#"> store board </a>
 		    </div>
 		    <ul class="nav navbar-nav navbar-right">

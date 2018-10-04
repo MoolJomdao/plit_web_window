@@ -118,6 +118,10 @@ public class StorePageController extends javax.servlet.http.HttpServlet implemen
 				Dao d = new Dao();
 				ArrayList<Comment> commentList = d.read_comment_from_one_user(userId); // userId와 관련된 모든 리뷰 다 가져온다
 
+				Dao backDao = new Dao();
+				String background = backDao.get_user_photo(userId);
+				
+				request.setAttribute("background", background );
 				request.setAttribute("userId", userId );
 				request.setAttribute("boardNickname", nickname );
 				request.setAttribute("userNickname", userNickname );
@@ -144,6 +148,7 @@ public class StorePageController extends javax.servlet.http.HttpServlet implemen
 				
 				Dao d = new Dao();
 				ArrayList<Comment> commentList = d.read_comment(boardNum);
+
 				
 				request.setAttribute("boardNickname", nickname );
 				request.setAttribute("userNickname", userNickname );

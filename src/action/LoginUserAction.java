@@ -46,6 +46,7 @@ public class LoginUserAction implements Action
 			}
 			
 			//로그인 성공
+			//session.removeAttribute("id");
 			session.setAttribute("id", user.getId());
 			session.setAttribute("user", user);
 			

@@ -64,9 +64,15 @@
                		<input> </input> 
                </li>
   			   <li> <a href="#"> <img src="icon/search.png"> </a></li>
+  			   <%
+			  	   	if( !ses.getAttribute("id").equals("Guest"))
+			  	   	{
+  			   %>
 		  	   <li> <a href="./html/writeBoard.jsp"> 글쓰기 </a></li>
 		  	   <%
-		  	   		if( ses.getAttribute("id") == null )
+		  	   		}
+		  	   
+		  	   		if( ses.getAttribute("id") == null || ses.getAttribute("id").equals("Guest") )
 		  	   			loginStat = "Login";
 		  	   		else
 		  	   			loginStat = "Logout";

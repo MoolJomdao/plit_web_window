@@ -2164,15 +2164,13 @@ public class Dao {
     public ArrayList<Comment> read_comment(int board_num)
     {
     	Comment c = null;
-    	ArrayList<Comment> arr = null;
+    	ArrayList<Comment> arr = new ArrayList<Comment>();;
     	
     	try {                                                                                                                                                                                 
 
     		pstmt = conn.prepareStatement("SELECT a.board_num, a.comment_num, a.comment_date, a.comment_content, a.comment_id, b.user_photo , a.comment_photo, a.comment_pw, a.comment_nickname, a.user_photo FROM comment a , user_info b WHERE a.comment_id = b.id AND a.board_num = ?");
     		pstmt.setInt(1, board_num);
     		rs = pstmt.executeQuery();
-    		
-    		arr = new ArrayList<Comment>();
     		
     		while(rs.next())
     		{

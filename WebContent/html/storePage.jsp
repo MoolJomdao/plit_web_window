@@ -250,7 +250,7 @@
          <a href="#"> <img src="icon/setting3.png" id="setting"></a>
          <div id="setting_section">
             <ul id="setting_menu">
-               <li> 가게명 변경 &nbsp; </li>
+               <li> 이름 변경 &nbsp; </li>
                <li> 메세지 변경 &nbsp; </li>
                <li> 위치 변경 &nbsp; </li>
                <li> 배경 변경 </li>

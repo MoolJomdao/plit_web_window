@@ -22,6 +22,9 @@ public class BoardListAction implements Action{
 			
 			// login���� ����� ���̵� �޾ƿ���
 			String id = (String)session.getAttribute("id");
+			if( id == null )
+				session.setAttribute("id", "Guest");
+			
 	   		if(id==null){
 	   			// TODO �Ƶ��� �޾� ���� ������ ��� �α��� ȭ������ ����.
 				forward.setRedirect(true);
