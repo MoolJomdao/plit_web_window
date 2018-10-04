@@ -29,6 +29,7 @@
 		*/
 		String loginStat;
 		HttpSession ses = request.getSession();
+		String id = (String)ses.getAttribute("id");
 		
 		ArrayList<Read_Board_List> arr = new ArrayList<Read_Board_List>();
 		arr = ( ArrayList<Read_Board_List> )request.getAttribute("rbl");
@@ -63,9 +64,15 @@
 		  	   		<input> </input>
 		  	    </li>
   			   <li> <a href="#"> <img src="icon/search.png"> </a></li>
+  			   <%
+			  	   	if( !ses.getAttribute("id").equals("Guest"))
+			  	   	{
+  			   %>
 		  	   <li> <a href="./html/writeBoard.jsp"> 글쓰기 </a></li>
 		  	   <%
-		  	   		if( ses.getAttribute("id") == null )
+		  	   		}
+		  	   
+  			 		if( ses.getAttribute("id") == null || ses.getAttribute("id").equals("Guest") )
 		  	   			loginStat = "Login";
 		  	   		else
 		  	   			loginStat = "Logout";
@@ -75,7 +82,7 @@
 		  	   	if( !ses.getAttribute("id").equals("Guest"))
 		  	   	{
 		  	   %>
-		  	   	<li> <a href="storePage.bo"> <%= nickname %> </a> </li>
+		  	   	<li> <a href="#" onclick="userNameClick()"> <%= nickname %> </a> </li>
 		  	   <%
 		  	   	}	
 		  	   %>
@@ -149,6 +156,7 @@
 		</div>
 	</div>
 	
+	<div id="backgroundA"></div>
 	<!-- 이미지 클릭 시 나타날 html -->
 	<div id="img_section">
 		<div id="album_section">   
@@ -165,6 +173,11 @@
 		<input id='radioValue' type='hidden' name='radioValue' value=''>
 		<input id="searchBtn" type='submit' style='display:none;'>
 	</form>
+	
+						<form action='storePage.bo' accept-charset='utf-8' method='POST'>
+							<input type='hidden' name='userId' value=<%= id %>>
+							<input id="sendMyPage" type='submit' style='display:none;'>
+						</form>
 </body>
 </html>
 
@@ -210,86 +223,93 @@
 	      })
 	   })
 	
-	/** 게시글 사진 클릭 시 확대해서  **/
-	$(function(){
-	   var onClick = false;
-	   var $input = $(".navbar-right input");
-	   $("#img_section").css("min-height", screen.height);
-	
-	
-	   // 이미지 상세 보기에서 다시 돌아가기
-	   $("#back").click(function(){
-	      $("#img_section").css("display", "none");
-	   });
-	
-	   // 앨범 영역 화살표 이벤트 
-	   $(".arrow").eq(0).click(function(){
-	      // 왼쪽
-	      scrollAlbum(300, "left", 300);
-	   });
-	
-	   $(".arrow").eq(1).click(function(){
-	      // 오른쪽 
-	      scrollAlbum(300, "right", 300);
-	   });
-	})
+   /** 게시글 사진 클릭 시 확대해서  **/
+   $(function(){
+      var onClick = false;
+      var $input = $(".navbar-right input");
+      var $img_section =  $("#img_section");
+      var $backgroundA = $("#backgroundA");
+      $backgroundA.css("height", document.body.scrollHeight + $('header').height() );
+   
+      // 이미지 상세 보기에서 다시 돌아가기
+      $("#back").click(function(){
+    	  $img_section.css("display", "none");
+    	  $backgroundA.css("visibility", "hidden");
+      });
+   
+      // 앨범 영역 화살표 이벤트 
+      $(".arrow").eq(0).click(function(){
+         // 왼쪽
+         scrollAlbum(300, "left", 300);
+      });
+   
+      $(".arrow").eq(1).click(function(){
+         // 오른쪽 
+         scrollAlbum(300, "right", 300);
+      });
+   })
 
-	function scrollAlbum(space, direction, duration){
-	   /*
-	    * space: 엘범 움직이는 거리 정도
-	    * direction: 왼쪽 / 오른쪽 
-	    * duration: 슬라이드 속도
-	   */
-	
-	   if( direction == "left")
-	   {
-	      var a = $("#album_section > ul").scrollLeft() - space;
-	   }
-	   else
-	   {
-	      var a = $("#album_section > ul").scrollLeft() + space;
-	   }
-	
-	   $("#album_section > ul").animate({
-	       scrollLeft: a
-	   }, duration);
-	}
+   function scrollAlbum(space, direction, duration){
+      /*
+       * space: 엘범 움직이는 거리 정도
+       * direction: 왼쪽 / 오른쪽 
+       * duration: 슬라이드 속도
+      */
+   
+      if( direction == "left")
+      {
+         var a = $("#album_section > ul").scrollLeft() - space;
+      }
+      else
+      {
+         var a = $("#album_section > ul").scrollLeft() + space;
+      }
+   
+      $("#album_section > ul").animate({
+          scrollLeft: a
+      }, duration);
+   }
 
-	// .card > img 클릭시 이미지 상세 보기
-	function imgClick( boardNum ){
-		   
-		   $.ajax({
-	            type : "POST", 
-	            url : "getBoardPhotos.bo", // url을 서버로 보내주면 지정 서블릿이 실행
-	            data : { "boardNum": boardNum }, // 서버에서 사용할 메소드를 type 에다가 넣어준다
-	            dataType : "json",
-	            
-	            success : function( data )
-	            {
-	            	var arr = data;
-	            	
-	            	for( var i=0; i<arr.length; i++)
-	            	{
-	            		var str = "<li class='albumImg no-drag'> <img src='" + arr[i] + "'> </li>"
-	  	      	      	// 이미지 불러와서 
-	  	      	      	$("#album_section ul").append(str);
-	            	}
-            		$('#currentImg #cImg').attr('src', arr[0]);
+   // .card > img 클릭시 이미지 상세 보기
+   function imgClick( boardNum ){
+	   $("#album_section ul").empty();
+	   
+         $.ajax({
+               type : "POST", 
+               url : "getBoardPhotos.bo", // url을 서버로 보내주면 지정 서블릿이 실행
+               data : { "boardNum": boardNum }, // 서버에서 사용할 메소드를 type 에다가 넣어준다
+               dataType : "json",
+               
+               success : function( data )
+               {
+                  var arr = data;
+                  
+                  for( var i=0; i<arr.length; i++)
+                  {
+                     var str = "<li class='albumImg no-drag'> <img src='" + arr[i] + "'> </li>"
+                          // 이미지 불러와서 
+                          $("#album_section ul").append(str);
+                  }
+                  $('#currentImg #cImg').attr('src', arr[0]);
 
-            		// 작은 사진 클릭시 큰 화면으로 띄우기
-            		$(".albumImg").click(function(){
-            		   var index = $(this).index();
-            		
-            		   var imgsrc = $(".albumImg > img").eq(index).attr("src");
-            		   $("#currentImg > img").eq(0).attr("src", imgsrc);
-            		});	
-	            },
-	            
-	            error : function()
-	            {
-	                alert("변경 실패");
-	            }                
-	        });
-	      $("#img_section").css("display", "block");
-	 }
+
+                  // 작은 사진 클릭시 큰 화면으로 띄우기
+                  $(".albumImg").click(function(){
+                     var index = $(this).index();
+                  
+                     var imgsrc = $(".albumImg > img").eq(index).attr("src");
+                     $("#currentImg > img").eq(0).attr("src", imgsrc);
+                  });   
+               },
+               
+               error : function()
+               {
+                   alert("변경 실패");
+               }                
+           });
+         $("#img_section").css("display", "block");
+         $("#backgroundA").css("visibility", "visible");
+         var scrollT = $(document).scrollTop();
+         $("#img_section").css("top", scrollT);
+    }
 </script>

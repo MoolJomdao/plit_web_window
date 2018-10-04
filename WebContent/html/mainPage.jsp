@@ -318,6 +318,7 @@
          $("#img_section").css("display", "block");
          $("#backgroundA").css("visibility", "visible");
          var scrollT = $(document).scrollTop();
-         $img_section.css("top", scrollT);
+         $("#img_section").css("top", scrollT);
     }
+   
 </script>
